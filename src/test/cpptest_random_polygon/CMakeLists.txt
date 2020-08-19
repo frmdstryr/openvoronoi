@@ -3,11 +3,11 @@ SET(test_name "cpptest_random_polygon" )
 MESSAGE(STATUS "configuring c++ test: " ${test_name})
 
 # the rpg lib
-find_library(RPG_LIBRARY 
+find_library(RPG_LIBRARY
             NAMES randompolygon
             PATHS /usr/local/lib/randompolygon
             DOC "rpg"
-            REQUIRED
+            OPTIONAL
 )
 include_directories( /usr/local/include/randompolygon )
 if(RPG_LIBRARY_FOUND)

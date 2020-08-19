@@ -21,20 +21,20 @@ def insert_polygon_points(vd, polygon):
     for p in polygon:
         pts.append(ovd.Point(p[0], p[1]))
     id_list = []
-    print "inserting ", len(pts), " point-sites:"
+    print("inserting %s point-sites:" % len(pts))
     m = 0
     for p in pts:
         id_list.append(vd.addVertexSite(p))
-        # print " ",m," added vertex ", id_list[ len(id_list) -1 ]
+        # print(" %s added vertext %s" % (m, id_list[ len(id_list) -1 ]))
         m = m + 1
-    print vd.numFaces(), " faces after all points inserted"
+    print("%s faces after all points inserted" % vd.numFaces())
     return id_list
 
 
 def insert_polygon_segments(vd, id_list):
     # j=0
     # jmax=9999999 # for debugging, set jmax to the problematic case to stop algorithm in the middle
-    print "inserting ", len(id_list), " line-segments:"
+    print("inserting %s line-segments:" % len(id_list))
     for n in range(len(id_list)):
         n_nxt = n + 1
         if n == (len(id_list) - 1):
@@ -103,5 +103,5 @@ if __name__ == "__main__":
     insert_many_polygons(vd, segs)
     filename = "svg_test.svg"
     ovd.vd2svg(filename, vd)
-    print "wrote to file %s" % filename
-    print "PYTHON All DONE."
+    print("wrote to file %s" % filename)
+    print("PYTHON All DONE.")

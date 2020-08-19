@@ -141,7 +141,7 @@ def final_lead_out(myscreen, prv_tang, nxt_tang, c1, r1, c2, r2, prv, nxt):
 
 
 def spiral_clear(myscreen, cutwidth, out_tangent, in_tangent, c1, r1, c2, r2, out1, in1):
-    print "( spiral clear! )"
+    print("( spiral clear! )")
     ngc_writer.pen_up()
 
     # end spiral at in1
@@ -196,7 +196,7 @@ def spiral_clear(myscreen, cutwidth, out_tangent, in_tangent, c1, r1, c2, r2, ou
         theta_end = theta
 
     # add a complete circle after the spiral.
-    print "( spiral-clear: final circle )"
+    print("( spiral-clear: final circle )")
     Npts = (2 * math.pi) / dtheta
     Npts = int(Npts)
     for n in range(Npts + 2):
@@ -386,11 +386,11 @@ def insert_polygon_points2(vd, polygon):
     for p in polygon:
         pts.append(ovd.Point(p[0], p[1]))
     id_list = []
-    # print "inserting ",len(pts)," point-sites:"
+    # print("inserting %s point-sites:" % len(pts))
     m = 0
     for p in pts:
         id_list.append(vd.addVertexSite(p))
-        # print " ",m," added vertex ", id_list[ len(id_list) -1 ]
+        # print(" %s added vertext %s" % (m, id_list[ len(id_list) -1 ]))
         m = m + 1
         # print vd.numFaces()," faces after all points inserted"
     return id_list
@@ -399,7 +399,7 @@ def insert_polygon_points2(vd, polygon):
 def insert_polygon_segments2(vd, id_list):
     # j=0
     # jmax=9999999 # for debugging, set jmax to the problematic case to stop algorithm in the middle
-    # print "inserting ",len(id_list)," line-segments:"
+    # print("inserting %s line-segments:" % len(id_list))
     for n in range(len(id_list)):
         n_nxt = n + 1
         if n == (len(id_list) - 1):
@@ -407,7 +407,7 @@ def insert_polygon_segments2(vd, id_list):
 
         # if (j<jmax):
         # vd.debug_on()
-        #    print " ",j,"inserting segment ",id_list[n]," - ",id_list[n_nxt]
+        #    print(" %s inserting segment %s-%s" % (j, id_list[n], id_list[n_nxt]))
 
         #    if 0: # id_list[n] == 22871: #102187: # 102187/7 #115869: # 51456: 115869
         #        vd.debug_on()
@@ -421,8 +421,8 @@ def insert_polygon_segments2(vd, id_list):
         # print vod
         # print dir(vod)
         #    vod.drawVertexIdx(v)
-        #        print "PYTHON All DONE."
-        #        myscreen.render()   
+        #        print("PYTHON All DONE.")
+        #        myscreen.render()
         #        myscreen.iren.Start()
         #    else:
         # pass
@@ -688,11 +688,11 @@ if __name__ == "__main__":
     foo = WritableObject()  # a writable object
     sys.stdout = foo  # redirection
 
-    print "( Medial-Axis pocketing. Proof-of-principle. 2012-02-25 )"
-    print "( OpenVoronoi %s  )" % (ovd.version())
-    print "( TOOL/MILL,1,0,50 ) "
-    print "( COLOR,0,255,255 ) "
-    print "( STOCK/BLOCK,300.0000,200.0000,10.0000,150.0000,100.0000,5.0000 ) "
+    print("( Medial-Axis pocketing. Proof-of-principle. 2012-02-25 )")
+    print("( OpenVoronoi %s  )" % (ovd.version()))
+    print("( TOOL/MILL,1,0,50 ) ")
+    print("( COLOR,0,255,255 ) ")
+    print("( STOCK/BLOCK,300.0000,200.0000,10.0000,150.0000,100.0000,5.0000 ) ")
 
     [segs, extents, scale] = get_scaled_segs("POC", 0.3)
     dx = -0.3
@@ -710,7 +710,7 @@ if __name__ == "__main__":
     times = insert_many_polygons(vd, segs)
     vd.check()
 
-    print "( VD1 done in   %.3f s.  )" % (sum(times))
+    print("( VD1 done in   %.3f s.  )" % (sum(times)))
     # vod.setVDText2(times)
 
     pi = ovd.PolygonInterior(True)
@@ -722,7 +722,7 @@ if __name__ == "__main__":
     ofs = of.offset(0.0015)
     t_after = time.time()
     # print "( VD1 OFFSET in ", 1e3*(t_after-t_before)," milliseconds.  )"
-    print "( VD1 OFFSET in %.3f s.  )" % (1e3 * (t_after - t_before))
+    print("( VD1 OFFSET in %.3f s.  )" % (1e3 * (t_after - t_before)))
     # print " offset is len=",len(ofs)
     # print ofs
 
@@ -755,7 +755,7 @@ if __name__ == "__main__":
     vd3 = ovd.VoronoiDiagram(1, 120)
     times = insert_offset_loop(vd3, ofs)
     # print "( VD3 done in ", 1e3*(sum(times))," milliseconds.  )"
-    print "( VD3 done in   %.3f s.  )" % (sum(times))
+    print("( VD3 done in   %.3f s.  )" % (sum(times)))
     vod3 = ovdvtk.VD(myscreen, vd3, float(scale), textscale=0.01, vertexradius=0.003)
 
     vod3.textScale = 0.0002
@@ -778,7 +778,7 @@ if __name__ == "__main__":
 
     cut_width = 0.002
     mapocket = ovd.MedialAxisPocket(vd3.getGraph())
-    mapocket.setWidth(cut_width)
+    mapocket.set_width(cut_width)
     mapocket.debug(True)
     t_before = time.time()
     mapocket.run()
@@ -802,10 +802,10 @@ if __name__ == "__main__":
     f = open('output.nc', 'w')
     for item in foo.content:
         if item != '\n':
-            print>> f, item
+            f.write(str(item))
     f.close()
 
-    print "python done."
+    print("python done.")
 
     myscreen.render()
     myscreen.iren.Start()

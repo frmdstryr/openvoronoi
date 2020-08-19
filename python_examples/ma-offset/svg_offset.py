@@ -37,22 +37,22 @@ def insert_polygon_points(vd, poly):
         #print("Inserting:{}".format(p))
         pts.append( ovd.Point( *p ))
     id_list = []
-    print "inserting ",len(pts)," point-sites:"
+    print("inserting %s point-sites:" % len(pts))
     m=0
     for p in pts:
         id_list.append( vd.addVertexSite( p ) )
-        print " ",m," added vertex ", id_list[ len(id_list) -1 ]
+        print(" %s added vertext %s" % (m, id_list[ len(id_list) -1 ]))
         m=m+1
     return id_list
 
 def insert_polygon_segments(vd,id_list):
     j=0
-    print "inserting ",len(id_list)," line-segments:"
+    print("inserting %s line-segments:" % len(id_list))
     for n in range(len(id_list)):
         n_nxt = n+1
         if n==(len(id_list)-1):
             n_nxt=0
-        print " ",j,"inserting segment ",id_list[n]," - ",id_list[n_nxt]
+        print(" %s inserting segment %s-%s" % (j, id_list[n], id_list[n_nxt]))
         vd.addLineSite( id_list[n], id_list[n_nxt])
         j=j+1
 
@@ -79,11 +79,11 @@ def insert_bb(vd, svgr):
     poly_id = insert_polygon_points(vd, svgr.bbox())
     insert_polygon_segments(vd,poly_id)
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
     #print ocl.revision()
     #w=2500
     #h=1500
-    
+
     #w=1920
     #h=1080
     w=1024
@@ -96,8 +96,8 @@ if __name__ == "__main__":
     svgr.centerPolys()
     print(svgr.stats())
 
-    myscreen = ovdvtk.VTKScreen(width=w, height=h) 
-    ovdvtk.drawOCLtext(myscreen, rev_text=ovd.version() )   
+    myscreen = ovdvtk.VTKScreen(width=w, height=h)
+    ovdvtk.drawOCLtext(myscreen, rev_text=ovd.version() )
 
     scale=1
     myscreen.render()
@@ -106,13 +106,13 @@ if __name__ == "__main__":
     camPos = far
     zmult = 0.5
     # camPos/float(1000)
-    myscreen.camera.SetPosition(0, -camPos/float(1000), zmult*camPos) 
+    myscreen.camera.SetPosition(0, -camPos/float(1000), zmult*camPos)
     myscreen.camera.SetClippingRange(-(zmult+1)*camPos,(zmult+1)*camPos)
     myscreen.camera.SetFocalPoint(0.0, 0, 0)
 
     vd = ovd.VoronoiDiagram(far,120)
-    print ovd.version()
-    
+    print(ovd.version())
+
     # for vtk visualization
     vod = ovdvtk.VD(myscreen,vd,float(scale), textscale=0.01, vertexradius=0.003)
     vod.drawFarCircle()
@@ -126,8 +126,8 @@ if __name__ == "__main__":
     vd.setEdgeOffset(0.05)
     times = insert_many_polygons(vd,svgr)
 
-    print "all sites inserted. "
-    print "VD check: ", vd.check()
+    print("all sites inserted. ")
+    print("VD check: %s" % vd.check())
 
     pi = ovd.PolygonInterior(  True )
     vd.filter_graph(pi)
@@ -145,6 +145,6 @@ if __name__ == "__main__":
     #vd.filter_graph(ma)
     vod.setVDText2(times)
     vod.setAll()
-    print "PYTHON All DONE."
-    myscreen.render()   
+    print("PYTHON All DONE.")
+    myscreen.render()
     myscreen.iren.Start()

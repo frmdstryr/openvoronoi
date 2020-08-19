@@ -27,24 +27,24 @@ def insert_polygon_points(vd, polygon):
     for p in polygon:
         pts.append(ovd.Point(p[0], p[1]))
     id_list = []
-    # print "inserting ",len(pts)," point-sites:"
+    # print("inserting %s point-sites:" % len(pts))
     m = 0
     for p in pts:
         id_list.append(vd.addVertexSite(p))
-        # print " ",m," added vertex ", id_list[ len(id_list) -1 ]
+        # print(" %s added vertext %s" % (m, id_list[ len(id_list) -1 ]))
         m = m + 1
-    print m, " point-sites inserted."  # inserting ",len(pts)," point-sites:"
+    print("%s point-sites inserted." % m)  # inserting ",len(pts)," point-sites:"
     return id_list
 
 
 def insert_polygon_segments(vd, id_list):
     j = 0
-    print "inserting ", len(id_list), " line-segments:"
+    print("inserting %s line-segments:" % len(id_list))
     for n in range(len(id_list)):
         n_nxt = n + 1
         if n == (len(id_list) - 1):
             n_nxt = 0
-        print " ", j, "inserting segment ", id_list[n], " - ", id_list[n_nxt]
+        print(" %s inserting segment %s - %s" % (j, id_list[n],  id_list[n_nxt]))
 
         if 0:  # id_list[n] == 31921: #78238: # 47013:
             vd.debug_on()
@@ -61,9 +61,9 @@ def insert_polygon_segments(vd, id_list):
             # f4792   f4795
             for v in vd.getFaceVertices(18924):
                 vod.drawVertexIdx(v)
-            print "PYTHON All DONE."
+            print("PYTHON All DONE.")
             # f = ovd.Point(0.055,-0.2437)
-            # myscreen.camera.SetPosition(f.x, f.y-float(1)/float(1000), 0.3) 
+            # myscreen.camera.SetPosition(f.x, f.y-float(1)/float(1000), 0.3)
             # myscreen.camera.SetClippingRange(-(zmult+1)*camPos,(zmult+1)*camPos)
             # myscreen.camera.SetFocalPoint( f.x, f.y, 0)
             myscreen.render()
@@ -116,11 +116,11 @@ def ttt_segments(text, scale):
     wr.conic = False
     wr.cubic = False
     wr.conic_biarc_subdivision = 10  # this has no effect?
-    wr.conic_line_subdivision = 25  # this increases nr of points 
+    wr.conic_line_subdivision = 25  # this increases nr of points
     wr.cubic_biarc_subdivision = 10  # no effect?
     wr.cubic_line_subdivision = 10  # no effect?
     wr.scale = float(1) / float(scale)
-    wr.setFont(3)
+    wr.set_font(3)
     # 0 OK   freeserif
     # 1 OK   freeserif bold
     # 2 err  freeserif italic   (has "VX" overlap!)
@@ -191,7 +191,7 @@ if __name__ == "__main__":
     segs5 = modify_segments(segs5)
 
     vd = ovd.VoronoiDiagram(far, 400)
-    print ovd.version()
+    print(ovd.version())
 
     vod = ovdvtk.VD(myscreen, vd, float(1), textscale=0.01, vertexradius=0.003)
     vod.drawFarCircle()
@@ -233,7 +233,7 @@ if __name__ == "__main__":
     t_after = time.time()
     oftime = t_after - t_before
 
-    print "offset done in ", oftime
+    print("offset done in %s" % oftime)
 
     for ofs in ofs_list:
         offset2vtk.drawOffsets2(myscreen, ofs)
@@ -256,15 +256,15 @@ if __name__ == "__main__":
     #    vod.drawVertexIdx(v)
 
     err = vd.getStat()
-    # print err 
-    print "got errorstats for ", len(err), " points"
+    # print err
+    print("got errorstats for %s points" % len(err))
     if len(err) > 1:
         minerr = min(err)
         maxerr = max(err)
-        print "min error= ", minerr
-        print "max error= ", maxerr
+        print("min error= %s" % minerr)
+        print("max error= %s" % maxerr)
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     # w2if.Modified()

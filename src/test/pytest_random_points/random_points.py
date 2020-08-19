@@ -18,29 +18,29 @@ def randomGenerators(far, Nmax):
 #
 # call with random_points.py s N
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     s = int(sys.argv[1])
     n_pts = int(sys.argv[2])
     random.seed(s)
     Nmax = n_pts
-    
-    print "random_points.py N=",Nmax," seed=",s
+
+    print("random_points.py N=%s seed=%s" % (Nmax, s))
     vd = ovd.VoronoiDiagram(1,120)
-    
-    plist = randomGenerators(1, Nmax)    
+
+    plist = randomGenerators(1, Nmax)
     times=[]
-    t_before = time.time() 
+    t_before = time.time()
     n=0
     id_list=[]
-    for p in plist: 
+    for p in plist:
         #print n," adding ",p
         id_list.append( vd.addVertexSite( p ) )
         n=n+1
     t_after = time.time()
     calctime = t_after-t_before
-    print " VD done in ", calctime," s, ", 1e6*calctime/(float(Nmax)*(math.log(Nmax)/math.log(2.0)))," us per n*log2(n)"
+    print(" VD done in %s s %s us per n*log2(n)" % (calctime, 1e6*calctime/(float(Nmax)*(math.log(Nmax)/math.log(2.0)))))
     c = vd.check()
-    print " VD check: ", c
+    print(" VD check: %s" % c)
     if c:
         exit(0)
     else:

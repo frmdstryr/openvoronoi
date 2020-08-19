@@ -1,26 +1,28 @@
 /*
  *  Copyright (c) 2010-2012 Anders Wallin (anders.e.e.wallin "at" gmail.com).
- *  
- *  This file is part of Openvoronoi 
+ *
+ *  This file is part of Openvoronoi
  *  (see https://github.com/aewallin/openvoronoi).
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 2.1 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
 
-#include <boost/python.hpp>
+#include <pybind11/pybind11.h>
+
+namespace py = pybind11;
 
 #include "medial_axis_walk.hpp"
 #include "voronoidiagram.hpp"
@@ -35,15 +37,15 @@ public:
     MedialAxisWalk_py(HEGraph& gi, int edge_pts = 20): MedialAxisWalk(gi, edge_pts) { }
 
     /// return list of medial-axis edges
-    boost::python::list walk_py() {
+    py::list walk_py() {
         do_walk();
-        boost::python::list py_walk;
+        py::list py_walk;
         BOOST_FOREACH( MedialChain chain, out ) { // loop through each chain
-            boost::python::list py_chain;
+            py::list py_chain;
             BOOST_FOREACH( MedialPointList pt_list, chain ) { //loop through each medial-point list
-                boost::python::list py_pt_list;
+                py::list py_pt_list;
                 BOOST_FOREACH( MedialPoint pt, pt_list ) { //loop through each medial-point
-                    boost::python::list py_pt;
+                    py::list py_pt;
                     py_pt.append( pt.p );
                     py_pt.append( pt.clearance_radius );
                     py_pt_list.append( py_pt );

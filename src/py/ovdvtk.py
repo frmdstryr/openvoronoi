@@ -109,13 +109,13 @@ def drawOffsets(myscreen, ofs):
             # p[0] is the Point
             # p[1] is -1 for lines, and r for arcs
             if n == 0:  # don't draw anything on the first iteration
-                previous = p[0]
+                previous = p.p
                 # first_point = p[0]
             else:
-                cw = p[3]
-                cen = p[2]
-                r = p[1]
-                p = p[0]
+                cw = p.cw
+                cen = p.c
+                r = p.r
+                p = p.p
                 if r == -1:
                     drawLine(myscreen, previous, p, lineColor)
                 else:
@@ -123,7 +123,7 @@ def drawOffsets(myscreen, ofs):
                 # myscreen.addActor( ovdvtk.Line(p1=(previous.x,previous.y,0),p2=(p.x,p.y,0),color=loopColor) )
                 previous = p
             n = n + 1
-        print "rendered loop ", nloop, " with ", len(lop), " points"
+        print("rendered loop %s with %s points" % (nloop, len(lop)))
         nloop = nloop + 1
 
 
@@ -318,7 +318,7 @@ class VD:
             err = pt[5]
             if err > 1e-6:
                 # id_text = str(idx)
-                print "drawErrorVertex ", idx, " pos= ", p, " err=", err
+                print("drawErrorVertex %s pos=%s err=%s" % (idx, p, err))
                 # factor = FollowerText( text=id_text,center=(p.x,p.y,0), scale = self.textScale, color=vcolor)
                 # self.verts.append(factor)
                 actor = Sphere(center=(p.x, p.y, 0), radius=self.vertexRadius, color=pink)
@@ -477,7 +477,7 @@ class VD:
         if (edgeType == ovd.EdgeType.NULLEDGE):
             return white
         else:
-            print "UNKNOWN edge type = ", edgeType
+            print("UNKNOWN edge type = %s" % edgeType)
             return white
 
     def setEdges(self):
@@ -606,7 +606,7 @@ def drawTree(myscreen, t, color=red, opacity=0.2, offset=(0, 0, 0)):
         #    if ( (i % (float(nmax)/10))==0):
         #        print ".",
         # i=i+1
-    # print "done."
+    # print("done.")
 
 
 def drawTree2(myscreen, t, color=red, opacity=0.2):
@@ -988,7 +988,7 @@ class Circle(CamvtkActor):
         lines = vtk.vtkCellArray()
         id = 0
         points = vtk.vtkPoints()
-        for n in xrange(0, resolution):
+        for n in range(0, resolution):
             line = vtk.vtkLine()
             angle1 = (float(n) / (float(resolution))) * 2 * math.pi
             angle2 = (float(n + 1) / (float(resolution))) * 2 * math.pi
@@ -1206,13 +1206,13 @@ class TrilistReader(vtk.vtkPolyDataAlgorithm):
         self.FileName = None
         self.SetNumberOfInputPorts(0)
         self.SetNumberOfOutputPorts(1)
-        
+
     def FillOutputPortInfornmation(self, port, info):
         if port == 0:
             info.Set( vtk.vtkDataObject.DATA_TYPE_NAME(), "vtkPolyData")
             return 1
         return 0
-        
+
     def RequestData(self, request, inputVector, outputVector):
         outInfo = outputVector.GetInformationObject(0)
         output = outInfo.Get( vtk.vtkDataObject.DATA_OBJECT() )
@@ -1220,7 +1220,7 @@ class TrilistReader(vtk.vtkPolyDataAlgorithm):
         points = vtk.vtkPoints()
         points.InsertNextPoint(0,0,0)
         polydata.SetPoints(points)
-        
+
         output.ShallowCopy(polydata)
         return 1
 """

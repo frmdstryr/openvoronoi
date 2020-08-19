@@ -83,7 +83,7 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
     # writeFrame(  w2if, lwr, 2 )
     # writeLargeFrame( myscreen, w2if, lwr, 2 , zoom=20)
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     myscreen.iren.Start()

@@ -1,19 +1,19 @@
 /*
  *  Copyright (c) 2010-2012 Anders Wallin (anders.e.e.wallin "at" gmail.com).
- *  
- *  This file is part of Openvoronoi 
+ *
+ *  This file is part of Openvoronoi
  *  (see https://github.com/aewallin/openvoronoi).
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 2.1 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -65,7 +65,7 @@ typedef boost::adjacency_list< boost::vecS,             // out-edge storage
                                 boost::directedS,       // directed tag
                                 OffsetLoop,             // vertex properties
                                 boost::no_property,     // edge properties
-                                boost::no_property,     // graph-properties 
+                                boost::no_property,     // graph-properties
                                 boost::listS            // edge storage
                            > MachiningGraph;
 /// vertices in MachiningGraph
@@ -124,7 +124,7 @@ public:
             distance_sorted_loops.insert(l);
         }
 
-        // go through the loops, in distance order, and add them as vertices to the MachiningGraph 
+        // go through the loops, in distance order, and add them as vertices to the MachiningGraph
         BOOST_FOREACH( OffsetLoop l, distance_sorted_loops ) {
             std::cout << "MachiningGraph adding loop at " << l.offset_distance << "\n";
             // each offset loop corresponds to a vertex in the machining-graph
@@ -132,7 +132,7 @@ public:
             g[new_vert] = l;
             vertex_order.push_back( new_vert ); // output std::vector
         }
-        
+
         // now add edges between vertices
         BOOST_FOREACH( MGVertex v, vertex_order) {
             std::cout << "connecting loop " << v << " at " << g[v].offset_distance << "\n";
@@ -140,16 +140,16 @@ public:
         }
         write_dotfile();
     }
-    
-    /// try to connect the new vertex to existing vertices    
+
+    /// try to connect the new vertex to existing vertices
     void connect_vertex(MGVertex v) {
 
         std::vector< MGVertex > ext_loops; // loops outside the current one
         double current_offset=0;
         bool first = true;
-        
+
         BOOST_FOREACH( MGVertex trg, vertex_order ) {
-            if ( (trg != v ) && (g[trg].offset_distance < g[v].offset_distance) ) { 
+            if ( (trg != v ) && (g[trg].offset_distance < g[v].offset_distance) ) {
                 // don't connect to self, or to inside loops
                 if (first ) {
                     current_offset = g[trg].offset_distance;
@@ -165,21 +165,21 @@ public:
                 }
             }
         }
-        
-        // go through the found loops and connect 
+
+        // go through the found loops and connect
         BOOST_FOREACH( MGVertex trg, ext_loops ) {
             boost::add_edge(v,trg,g);
         }
     }
-    
+
     /// return true if the in Vertex is interior to the out Vertex
     bool inside(MGVertex out, MGVertex in) {
         OffsetLoop in_loop = g[in];
         OffsetLoop out_loop = g[out];
-        
+
         std::vector<HEFace> in_loop_faces;
         std::vector<HEFace> out_loop_faces;
-        
+
         //std::cout << " " << in_loop.offset_distance << " in_loop faces: ";
         bool first = true;
         BOOST_FOREACH( OffsetVertex in_ofs_vert, in_loop.vertices ) {
@@ -202,22 +202,22 @@ public:
             }
         }
         //std::cout << "\n";
-        
+
         std::set<HEVertex> in_enclosed = loop_enclosed_vertices(in_loop_faces);
         std::cout << "  IN " << in << " enclosed vertices: ";
         BOOST_FOREACH(HEVertex tv, in_enclosed) {
             std::cout << vdg[tv].index << " ";
         }
         std::cout << "\n";
-        
+
         std::set<HEVertex> out_enclosed = loop_enclosed_vertices(out_loop_faces);
         std::cout << "  OUT " << out << " enclosed vertices: ";
-        
+
         BOOST_FOREACH(HEVertex tv, out_enclosed) {
             std::cout << vdg[tv].index << " ";
         }
         std::cout << "\n";
-        
+
         BOOST_FOREACH( HEVertex inv, in_enclosed) {
             if ( out_enclosed.find( inv ) != out_enclosed.end() )
                 return true;
@@ -230,7 +230,7 @@ public:
                     return true;
                 }
             }
-        } 
+        }
         std::cout << "  NO Match!\n";
         */
         return false;
@@ -245,14 +245,14 @@ std::set<HEVertex> loop_enclosed_vertices( std::vector<HEFace> in_loop_faces) {
             in_loop_vertices.push_back(in_vertices);
             //std::cout << " face " << f << " has " << in_vertices.size() << " vertices\n";
         }
-        
+
         std::set< HEVertex > in_loop_enclosed_vertices;
         // now figure out which of the vertices are enclosed
         for(unsigned int i=0;i<in_loop_vertices.size();++i) {
             // i chooses the face we work on
             // now choose a vertex
             VertexVector test_face_verts = in_loop_vertices[i];
-            for (unsigned int iv=0;iv<in_loop_vertices[i].size();++iv) { 
+            for (unsigned int iv=0;iv<in_loop_vertices[i].size();++iv) {
                 HEVertex test_vert = test_face_verts[iv];
                 for(unsigned int j=0;j<in_loop_vertices.size();++j) { // choose first comp-face
                     if ( j!=i ) {
@@ -274,26 +274,26 @@ std::set<HEVertex> loop_enclosed_vertices( std::vector<HEFace> in_loop_faces) {
                                 if (comp1_ok && comp2_ok)
                                     in_loop_enclosed_vertices.insert(test_vert);
                             }
-                        }   
+                        }
                     }
                 }
             }
         }
     //assert( !in_loop_enclosed_vertices.empty() );
     return in_loop_enclosed_vertices;
-}    
+}
     /// write the MachiningGraph to a .dot file for visualization
-    void write_dotfile() {        
+    void write_dotfile() {
         std::filebuf fb;
         fb.open ("test.dot",std::ios::out);
         std::ostream out(&fb);
         label_writer<MachiningGraph> lbl_wrt(g);
         boost::write_graphviz( out, g, lbl_wrt);
     }
-       
+
 protected:
     /// set of Loops, sorted by decreasing offset-distance
-    std::multiset<OffsetLoop, OffsetLoopCompare> distance_sorted_loops; 
+    std::multiset<OffsetLoop, OffsetLoopCompare> distance_sorted_loops;
     std::vector<MGVertex> vertex_order; ///< the output of this algorithm, vertices in sorted order
     OffsetLoops all_loops; ///< all loops we deal with
     MachiningGraph g; ///< machining-graph constructed when this algorithm runs

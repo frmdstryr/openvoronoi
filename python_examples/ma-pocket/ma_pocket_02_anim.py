@@ -48,7 +48,7 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0.22, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     t_after = time.time()
     times.append(t_after - t_before)
 
-    print "all point sites inserted. "
+    print("all point sites inserted. ")
     vd.check()
 
     t_before = time.time()
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     vod.setAll()
 
     mapocket = ovd.MedialAxisPocket(vd.getGraph())
-    mapocket.setWidth(0.005)
+    mapocket.set_width(0.005)
 
     mapocket.run()
 
@@ -123,7 +123,7 @@ if __name__ == "__main__":
         for n in range(len(mic_list)):
             mic = mic_list[n]
             if n == 0:
-                print "hello", mic[0], " r = ", mic[1]
+                print("hello %s r= %s" % (mic[0], mic[1]))
                 drawCircle(myscreen, mic[0], mic[1], ovdvtk.red)
             else:
                 drawCircle(myscreen, mic[0], mic[1], ovdvtk.green)
@@ -139,9 +139,9 @@ if __name__ == "__main__":
             time.sleep(0.1)
             myscreen.render()
 
-        print "mic done."
+        print("mic done.")
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     myscreen.iren.Start()

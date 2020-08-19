@@ -1,0 +1,35 @@
+package:
+  name: openvoronoi
+  version: 2018.08
+
+source:
+  path: ./
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - cmake
+    - pybind11
+
+  host:
+    - boost
+    - qd
+    - python
+
+  run:
+    - python
+    - boost
+
+test:
+  imports:
+    - openvoronoi
+
+about:
+  home: https://github.com/aewallin/openvoronoi
+  license: LGPL2.1
+  license_family: LGPL
+  summary: 2D voronoi diagram for point and line-segment sites using incremental topology-oriented algorithm. C++ with python bindings
+  description: 2D voronoi diagram for point and line-segment sites using incremental topology-oriented algorithm. C++ with python bindings

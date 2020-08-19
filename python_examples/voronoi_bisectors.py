@@ -57,7 +57,7 @@ def drawLine(myscreen, l, lineColor):
 
 # CIRCLE definition
 # circle offset is  (x(t) - xc)^2 + (y(t)-yc)^2 = (r+k*t)^2
-# POINT is circle with r=1 and k=1 
+# POINT is circle with r=1 and k=1
 class Circle:
     def __init__(self, c=ovd.Point(0, 0), r=1, cw=1, k=1):
         self.c = c
@@ -67,7 +67,7 @@ class Circle:
 
 
 # LINE def
-# line offset is  a1 x + b1 y + c1 + k1 t = 0 and a*a + b*b = 1 
+# line offset is  a1 x + b1 y + c1 + k1 t = 0 and a*a + b*b = 1
 class Line:
     def __init__(self, a, b, c, k):
         self.a = float(a)
@@ -82,19 +82,19 @@ class Line:
 # bisectors are of the form
 # line, parabola, ellipse, hyperbola
 #     x(t) = x1 - x2 - x3*t +/- x4 sqrt( square(x5+x6*t) - square(x7+x8*t) )
-#     y(t) = y1 - y2 - y3*t +/- y4 sqrt( square(y5+y6*t) - square(y7+y8*t) ) 
+#     y(t) = y1 - y2 - y3*t +/- y4 sqrt( square(y5+y6*t) - square(y7+y8*t) )
 # line/line: line
 # circle/line: parabola
 # circle/circle: ellipse/hyperbola
 # !only valid if no parallel lines and no concentric arcs
 #
-# line:   (a, b, c, k)     
+# line:   (a, b, c, k)
 #         a1 x + b1 y + c1 + k1 t = 0 and a*a + b*b = 1
 #         k= +/- 1 indicates offset to right/left
 #
-# circle: (xc, yc, r, lambda) 
+# circle: (xc, yc, r, lambda)
 #         (x(t) - xc1)^2 + (y(t)-yc1)^2 = (r1+k1*t)^2
-#        lambda=-1 for CCW arc and +1 otherwise 
+#        lambda=-1 for CCW arc and +1 otherwise
 #         k +1 enlarging circle, k -1 shrinking circle
 #
 # for a bisector we store only four parameters (alfa1, alfa2, alfa3, alfa4)
@@ -104,30 +104,30 @@ class Line:
 #    alfa1= (b1*d2-b2*d1)/delta
 #    alfa2= (a2*d1-a1*d2)/delta
 #    alfa3= b2-b1
-#    alfa4= a1-a2 
+#    alfa4= a1-a2
 #   bisector-params:
 #    x1 = alfa1, x3 = -alfa3, x2 = x4 = x5 = x6 = x7 = x8 = 0
-#    y1 = alfa2, y3 = -alfa4, y2=y4=y5=y6=y7=y8 = 0 
+#    y1 = alfa2, y3 = -alfa4, y2=y4=y5=y6=y7=y8 = 0
 #
 # circle/line
-#     
+#
 #    alfa1= a2
 #    alfa2= b2
 #    alfa3= a2*xc1 + b2*yc1+d2
 #    alfa4= r1
-#   params: 
+#   params:
 #    x1 = xc1, x2 = alfa1*alfa3, x3 = -alfa1, x3 = alfa2, x5 = alfa4, x6 = lambda1, x7 = alfa3, x8 = -1
-#    y1 = yc1, y2 = alfa2*alfa3, y3 = -alfa2, y4 = alfa1, y5 = alfa4, y6 = lambda1, y7 = alfa3, y8 = -1 
+#    y1 = yc1, y2 = alfa2*alfa3, y3 = -alfa2, y4 = alfa1, y5 = alfa4, y6 = lambda1, y7 = alfa3, y8 = -1
 #
 # circle / circle
-#    d= sqrt( square(xc1-xc2) + square(yc1-yc2) ) 
+#    d= sqrt( square(xc1-xc2) + square(yc1-yc2) )
 #    alfa1= (xc2-xc1)/d
 #    alfa2= (yc2-yc1)/d
 #    alfa3= (r2*r2-r1*r1-d*d)/2d
-#    alfa4= (lambda2*r2-lambda1*r1)/d 
+#    alfa4= (lambda2*r2-lambda1*r1)/d
 #   params:
 #    x1 = xc1, x2 = alfa1*alfa3, x3 = alfa1*alfa4, x4 = alfa2, x5 = r1, x6 = lambda1, x7 = alfa3, x8 = alfa4
-#    y1 = yc1, y2 = alfa2*alfa3, y3 = alfa2*alfa4, y4 = alfa1, y5 = r1, y6 = lambda1, y7 = alfa3, y8 = alfa4 
+#    y1 = yc1, y2 = alfa2*alfa3, y3 = alfa2*alfa4, y4 = alfa1, y5 = r1, y6 = lambda1, y7 = alfa3, y8 = alfa4
 
 class LineLine:
     """ line/line bisector is a line """
@@ -179,8 +179,8 @@ class LineLine:
 
 class CircleCircle:
     # CIRCLE / CIRCLE
-    # d= sqrt( square(xc1-xc2) + square(yc1-yc2) ) 
-    # cw=-1 for CCW arc and +1 otherwise 
+    # d= sqrt( square(xc1-xc2) + square(yc1-yc2) )
+    # cw=-1 for CCW arc and +1 otherwise
     def __init__(self, c1, c2):
         self.d = (c1.c - c2.c).norm()
         self.alfa1 = 0.0
@@ -226,23 +226,23 @@ class CircleCircle:
 #    * alfa1= a2
 #    * alfa2= b2
 #    * alfa3= a2*xc1 + b2*yc1+d2 (c2?)
-#    * alfa4= r1 
+#    * alfa4= r1
 #       x1 = xc1
 #       x2 = alfa1*alfa3
-#       x3 = -alfa1, 
-#       x3 = alfa2, 
-#       x5 = alfa4, 
-#       x6 = lambda1, 
-#       x7 = alfa3, 
+#       x3 = -alfa1,
+#       x3 = alfa2,
+#       x5 = alfa4,
+#       x6 = lambda1,
+#       x7 = alfa3,
 #       x8 = -1
-#       y1 = yc1, 
-#       y2 = alfa2*alfa3, 
-#       y3 = -alfa2, 
-#       y4 = alfa1, 
-#       y5 = alfa4, 
-#       y6 = lambda1, 
-#       y7 = alfa3, 
-#       y8 = -1 
+#       y1 = yc1,
+#       y2 = alfa2*alfa3,
+#       y3 = -alfa2,
+#       y4 = alfa1,
+#       y5 = alfa4,
+#       y6 = lambda1,
+#       y7 = alfa3,
+#       y8 = -1
 
 class CircleLine:
     def __init__(self, c1, l2):
@@ -260,7 +260,7 @@ class CircleLine:
         self.tmin = (abs(self.alfa3) - c1.r) / (2.0)
 
         self.tmax = 100
-        print " tmax=", self.tmax, " tmin=", self.tmin
+        print(" tmax=%s tmin=%s" % (self.tmax, self.tmin))
 
     def getX(self):
         x = []
@@ -316,8 +316,8 @@ class Bisector:
         # (x[4]+x[5]*t) = (x[6]+x[7]*t)  OR   (x[4]+x[5]*t) = -(x[6]+x[7]*t)
         # (x[5]-x[7])*t = (x[6]-x[4])  OR   (x[5]+x7*t) = x4-x[6]
         # t = x6-x4 / (x5-x7)    or    t = x4-x6 / (x5+x7)
-        x = self.x 
-        y = self.y 
+        x = self.x
+        y = self.y
         t1=0
         t2=0
         t3=0
@@ -431,8 +431,8 @@ def drawLineLineTest():
 
     l1l2 = LineLine(l1, l2)  # bisectors
     l2l1 = LineLine(l2, l1)  # it should not matter if we call with (l1,l2) or (l2,l1) (?)
-    print l1l2
-    print l2l1
+    print(l1l2)
+    print(l2l1)
     b1 = Bisector(l1l2)
     b2 = Bisector(l2l1)
     drawBisector(myscreen, b1)
@@ -525,7 +525,7 @@ def drawSeparatorSolver1(alfa=6.4):
     w2if.SetInputData(myscreen.renWin)
     lwr = vtk.vtkPNGWriter()
     lwr.SetInputConnection(w2if.GetOutputPort())
-    #             a              b            c    k       
+    #             a              b            c    k
     l1 = Line(math.cos(1), math.sin(1), 1, -1)  # first line-site
     drawLine(myscreen, l1, ovdvtk.yellow)
 
@@ -556,7 +556,7 @@ def drawSeparatorSolver1(alfa=6.4):
 
     # 1st degree equation gives t directly:
     tsln = -(l3.a * p2.x + l3.b * p2.y + l3.c) / (sv.x * l3.a + sv.y * l3.b + l3.k)
-    print tsln
+    print(tsln)
     psln = p2 + tsln * sv
     drawVertex(myscreen, psln, ovdvtk.pink, rad=1)
     drawCircle(myscreen, psln, tsln, ovdvtk.pink)
@@ -579,7 +579,7 @@ def drawSeparatorSolver2(px=10, py=20):
     w2if.SetInputData(myscreen.renWin)
     lwr = vtk.vtkPNGWriter()
     lwr.SetInputConnection(w2if.GetOutputPort())
-    #             a              b            c    k       
+    #             a              b            c    k
     l1 = Line(math.cos(1), math.sin(1), 1, -1)  # first line-site
     drawLine(myscreen, l1, ovdvtk.yellow)
 
@@ -615,7 +615,7 @@ def drawSeparatorSolver2(px=10, py=20):
     dy = p2.y - p3.y
     tsln = -(dx * dx + dy * dy) / (2 * (dx * sv.x + dy * sv.y))
 
-    print tsln
+    print(tsln)
     psln = p2 + tsln * sv
     drawVertex(myscreen, psln, ovdvtk.pink, rad=1)
     drawCircle(myscreen, psln, tsln, ovdvtk.pink)
@@ -686,7 +686,7 @@ def drawBitangents():
     drawCircle(myscreen, c1, r1, ovdvtk.red)
     drawCircle(myscreen, c2, r2, ovdvtk.green)
 
-    # when machining c2 the maximum cut-width is 
+    # when machining c2 the maximum cut-width is
     # w_max = | c2 - c1 | + r2 - r1
 
     # we are looking for the bi-tangents of the two circles, given by
@@ -696,7 +696,7 @@ def drawBitangents():
     # +/- r1 = A c1x + B c1y + C
     # +/- r2 = A c2x + B c2y + C
     # which in matrix form is
-    #   Mc=v  
+    #   Mc=v
     # ( c1x c1y ) ( A ) = ( +/- r1 - C )
     # ( c2x c2y ) ( B ) = ( +/- r2 - C )
     #
@@ -708,7 +708,7 @@ def drawBitangents():
     #  B = det(M_2) / det(M) = det ( c1x  +/-r1-C ) / det(M) = pC + q
     #                              ( c2x  +/-r2-C )
     # this can be inserted into the constraint
-    # A^2 + B^2 = 1 
+    # A^2 + B^2 = 1
     # (mC + n )^2 + (pC+q)^2
     # m^2 C^2 + 2mnC + n^2 + p^2 C^2 + 2pqC + q^2 =1
     #
@@ -721,14 +721,14 @@ def drawBitangents():
     #     ( c2x r2-C )
     lines = []
     detM = c1.x * c2.y - c2.x * c1.y
-    print "detM= ", detM
+    print("detM= %s" % detM)
     m = (c1.y - c2.y) / detM
     p = (c2.x - c1.x) / detM
 
     n = (c2.y * r1 - c1.y * r2) / detM
     q = (c1.x * r2 - c2.x * r1) / detM
     roots1 = quadratic_roots(m * m + p * p, 2 * (m * n + p * q), n * n + q * q - 1)
-    print "roots1 ", roots1
+    print("roots1 %s" % roots1)
     for r in roots1:
         lines.append(root_to_line(r, m, n, p, q))
 
@@ -771,7 +771,7 @@ def root_to_line(root, m, n, p, q):
     C = root
     A = m * C + n
     B = p * C + q
-    print A, " ", B, " ", C, " ", A * A + B * B
+    print("%s %s %s %s" % (A, B, C, A * A + B * B))
     l = Line(A, B, C, 1)
     return l
 
@@ -794,10 +794,10 @@ def drawBitangents2():
     r2 = 2  # 16 # 5
     drawCircle(myscreen, c1, r1, ovdvtk.red)
     drawCircle(myscreen, c2, r2, ovdvtk.green)
-    # when machining c2 the maximum cut-width is 
+    # when machining c2 the maximum cut-width is
     # w_max = | c2 - c1 | + r2 - r1
     # print "dr = ",dr
-    print " cut-width = ", ((c2 - c1).norm() + r2 - r1)
+    print(" cut-width = %s" % ((c2 - c1).norm() + r2 - r1))
     [bd1, bd2] = bitanget_direction(c1, c2, r1, r2)
     # from C, go a distance r along the normal to the line.
     p1 = c1 + r1 * bd1
@@ -825,8 +825,8 @@ def bitanget_direction(c1, c2, r1, r2):
     # r_large=0
     # c_small=c1
     # c_large=c2
-    print " c1 ", c1
-    print " c2 ", c2
+    print(" c1 %s" % c1)
+    print(" c2 %s" % c2)
     """
     if r1>r2:
         r_large = r1

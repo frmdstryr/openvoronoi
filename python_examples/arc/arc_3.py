@@ -44,9 +44,9 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
     vd.check()
-    # print "created."
+    # print("created.")
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -77,14 +77,14 @@ if __name__ == "__main__":
     # + regularGridGenerators(far, Nmax) + circleGenerators(far, Nmax)
 
     # plist = [ovd.Point(0,0)]
-    # print plist
+    # print(plist)
     times = []
     t_before = time.time()
     n = 0
     id_list = []
     # vd.debug_on()
     for p in plist:
-        print n, " adding PointSite ", p
+        print("%s adding PointSite %s" % (n, p))
         id_list.append(vd.addVertexSite(p))
         n = n + 1
     t_after = time.time()
@@ -103,10 +103,10 @@ if __name__ == "__main__":
     c1 = ovd.Point(0.1 - d, 0.1 - d)
 
     vd.addArcSite(id_list[1], id_list[2], c1, False)
-    # vd.addArcSite( id_list[2], id_list[1] , c1, True ) 
+    # vd.addArcSite( id_list[2], id_list[1] , c1, True )
 
     # c2 = ovd.Point(0.1-d,-0.1-d)
-    # vd.addArcSite( id_list[3], id_list[4] , c2, False  ) 
+    # vd.addArcSite( id_list[3], id_list[4] , c2, False  )
 
     # vd.check()
 
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     vod.setAll()
     myscreen.render()
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     myscreen.iren.Start()

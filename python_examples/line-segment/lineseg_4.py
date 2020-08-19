@@ -54,7 +54,7 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version(), " ", ovd.build_type()
+    print(ovd.version()), " ", ovd.build_type()
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -80,13 +80,13 @@ if __name__ == "__main__":
 
     linesegs = 1  # switch to turn on/off line-segments
 
-    print "waiting for ", Nmax, " segments..",
+    print("waiting for %s segments.." % Nmax)
     sys.stdout.flush()
     t_before = time.time()
-    segs = gens.randomSegments(far, Nmax)  # uncomment this to generate segments on the fly 
+    segs = gens.randomSegments(far, Nmax)  # uncomment this to generate segments on the fly
 
     """
-    filename = "../src/test/data/randomsegments_{0}.pickle.gz".format(Nmax) # or use this to load pre-computed segments 
+    filename = "../src/test/data/randomsegments_{0}.pickle.gz".format(Nmax) # or use this to load pre-computed segments
     # (produced with lineseg_dataset_generator.py)
     f = gzip.open(filename, 'rb')
     pstring = f.read()
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     f.close()
     """
 
-    """    
+    """
     print "waiting for ",Nmax," segments..",
     sys.stdout.flush()
     t_before = time.time()
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     """
 
     t_after = time.time()
-    print ".done in {0:.3f} s.".format(t_after - t_before)
+    print(".done in {0:.3f} s.".format(t_after - t_before))
     times = []
     id_list = []
     m = 0
@@ -121,8 +121,8 @@ if __name__ == "__main__":
     times.append(t_after - t_before)
     # exit()
 
-    print "   ", 2 * Nmax, " point-sites sites took {0:.3f}".format(times[0]), " seconds, {0:.2f}".format(
-        1e6 * float(times[0]) / (float(2 * Nmax) * float(math.log10(2 * Nmax)))), "us/n*log(n)"
+    print("   {}".format(2 * Nmax) + " point-sites sites took {0:.3f}".format(times[0]) + " seconds, {0:.2f}".format(
+        1e6 * float(times[0]) / (float(2 * Nmax) * float(math.log10(2 * Nmax)))) + "us/n*log(n)")
     vd.check()
     # vd.debug_on()
     nsegs = Nmax
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     t_before = time.time()
     for s in id_list:
         if 0:  # s[0] == 119:
-            print n, " adding line-segment", s[0], " - ", s[1]
+            print("%s adding line-segment %s-%s"(n, s[0], s[1]))
             vd.debug_on()
             vd.addLineSite(s[0], s[1])
             vod.setVDText2([1, 1])
@@ -147,15 +147,15 @@ if __name__ == "__main__":
             # f4792   f4795
             # for v in vd.getFaceVertices(18924):
             #    vod.drawVertexIdx(v)
-            print "PYTHON All DONE."
+            print("PYTHON All DONE.")
             # f = ovd.Point(0.055,-0.2437)
-            # myscreen.camera.SetPosition(f.x, f.y-float(1)/float(1000), 0.3) 
+            # myscreen.camera.SetPosition(f.x, f.y-float(1)/float(1000), 0.3)
             # myscreen.camera.SetClippingRange(-(zmult+1)*camPos,(zmult+1)*camPos)
             # myscreen.camera.SetFocalPoint( f.x, f.y, 0)
             myscreen.render()
             myscreen.iren.Start()
         elif n <= nsegs and linesegs == 1:
-            print n, " adding line-segment", s[0], " - ", s[1]
+            print("%s adding line-segment %s-%s" % (n, s[0], s[1]))
             vd.debug_on()
             vd.addLineSite(s[0], s[1])
 
@@ -167,7 +167,7 @@ if __name__ == "__main__":
 
     # s = id_list[nsegs]
     # vd.debug_on()
-    # vd.addLineSite( s[0], s[1], 4) 
+    # vd.addLineSite( s[0], s[1], 4)
     # seg = id_list[nsegs]
     # vd.addLineSite(seg[0],seg[1],10)
     # 4 delete-tree
@@ -177,35 +177,35 @@ if __name__ == "__main__":
     # 8 add new edges
     # 9 delete delete-tree edges
     # 10 reset status
-    print "Summary:"
-    print "   ", 2 * Nmax, " point-sites sites took {0:.3f}".format(times[0]), " seconds, {0:.2f}".format(
-        1e6 * float(times[0]) / (float(2 * Nmax) * float(math.log10(2 * Nmax)) / float(math.log10(2)))), "us/n*log2(n)"
-    print "   ", Nmax, " line-sites sites took {0:.3f}".format(times[1]), " seconds, {0:.2f}".format(
-        1e6 * float(times[1]) / (float(Nmax) * float(math.log10(Nmax)) / float(math.log10(2)))), "us/n*log2(n)"
+    print("Summary:")
+    print("   {}".format(2 * Nmax) + " point-sites sites took {0:.3f}".format(times[0]) + " seconds, {0:.2f}".format(
+        1e6 * float(times[0]) / (float(2 * Nmax) * float(math.log10(2 * Nmax)) / float(math.log10(2)))) + "us/n*log2(n)")
+    print("   {}".format(Nmax) + " line-sites sites took {0:.3f}".format(times[1]) + " seconds, {0:.2f}".format(
+        1e6 * float(times[1]) / (float(Nmax) * float(math.log10(Nmax)) / float(math.log10(2)))) + "us/n*log2(n)")
 
     vod.setVDText2(times)
 
     err = vd.getStat()
-    # print err 
-    print "got errorstats for ", len(err), " points"
+    # print err
+    print("got errorstats for %s points" % len(err))
     if len(err) > 1:
         minerr = min(err)
         maxerr = max(err)
-        print "min error= ", minerr
-        print "max error= ", maxerr
+        print("min error= %s" % minerr)
+        print("max error= %s" % maxerr)
 
-    print "num vertices: ", vd.numVertices()  # Nmax=200 gives 1856(187)
-    print "num SPLIT vertices: ", vd.numSplitVertices()
+    print("num vertices: %s" % vd.numVertices())  # Nmax=200 gives 1856(187)
+    print("num SPLIT vertices: %s" % vd.numSplitVertices())
     # nmax= 20 gives 175(13)
 
     calctime = t_after - t_before
     if Nmax == 0:
         Nmax = 1
-    print " VD done in ", calctime, " s, ", calctime / Nmax, " s per generator"
+    print(" VD done in %s s, %s s per generator" % (calctime, calctime / Nmax))
 
     vod.setAll()
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     w2if.Modified()

@@ -8,7 +8,7 @@ import vtk
 
 """
     Example-script for openvoronoi
-    
+
     - Get geometry from truetypetracer
     - center, scale, and modify line-segments from truetypetracer
     - create VD
@@ -39,7 +39,7 @@ def drawLoops(myscreen, loops, loopColor):
                 myscreen.addActor(ovdvtk.Line(p1=(previous[0], previous[1], 0), p2=(p[0], p[1], 0), color=loopColor))
                 previous = p
             n = n + 1
-        print "rendered loop ", nloop, " with ", len(lop), " points"
+        print("rendered loop %s with %s points" % (nloop, len(lop)))
         nloop = nloop + 1
 
 
@@ -96,25 +96,25 @@ def insert_polygon_points(vd, polygon):
     for p in polygon:
         pts.append(ovd.Point(p[0], p[1]))
     id_list = []
-    print "inserting ", len(pts), " point-sites:"
+    print("inserting %s point-sites:" % len(pts))
     m = 0
     for p in pts:
         id_list.append(vd.addVertexSite(p))
-        print " ", m, " added vertex ", id_list[len(id_list) - 1], " ({0}, {1})".format(p.x, p.y)
+        print(" %s added vertex %s" % (m, id_list[len(id_list) - 1])), " ({0}, {1})".format(p.x, p.y)
         m = m + 1
-    print vd.numFaces(), " faces after all points inserted"
+    print("%s faces after all points inserted" % vd.numFaces())
     return id_list
 
 
 def insert_polygon_segments(vd, id_list):
     """ insert LineSite into VD
-        
+
         the polygon forms a loop:
         id[-1] - id[0] - id[1] ... id[-2] - id[-1] - (back to beginning)
     """
     j = 0
     # jmax=9999999 # for debugging, set jmax to the problematic case to stop algorithm in the middle
-    print "inserting ", len(id_list), " line-segments:"
+    print("inserting %s line-segments:" % len(id_list))
     for n in range(len(id_list)):
         n_nxt = n + 1
         if n == (len(id_list) - 1):
@@ -122,9 +122,9 @@ def insert_polygon_segments(vd, id_list):
 
         # if (j<jmax):
         # vd.debug_on()
-        # print " ",j,"inserting segment ",id_list[n]," - ",id_list[n_nxt]
+        # print(" %s inserting segment %s-%s" % (j, id_list[n], id_list[n_nxt]))
         if 0:  # id_list[n]==304: #j == 0:
-            print " ", j, "inserting segment ", id_list[n], " - ", id_list[n_nxt]
+            print(" %s inserting segment %s - %s" % (j, id_list[n],  id_list[n_nxt]))
             vd.debug_on()
             vd.addLineSite(id_list[n], id_list[n_nxt])
             vod.setVDText2([1, 1])
@@ -137,11 +137,11 @@ def insert_polygon_segments(vd, id_list):
                 vod.drawVertexIdx(v)
 
             vod.setAll()
-            print "PYTHON All DONE."
+            print("PYTHON All DONE.")
             myscreen.render()
             myscreen.iren.Start()
         else:
-            print " ", j, "inserting segment ", id_list[n], " - ", id_list[n_nxt]
+            print(" %s inserting segment %s - %s" % (j, id_list[n],  id_list[n_nxt]))
             vd.addLineSite(id_list[n], id_list[n_nxt])
         j = j + 1
 
@@ -150,7 +150,7 @@ def modify_segments(segs):
     """ modify truetype-segments
         - delete duplicated point (first==last)
         - reverse order of points (reason?)
-    
+
     """
     segs_mod = []
     for seg in segs:
@@ -209,8 +209,8 @@ def ttt_segments(text, scale, subdivision=100):
 
     # wr.cubic_biarc_subdivision = 10 # no effect?
     # wr.cubic_line_subdivision = 10 # no effect?
-    # wr.setFont(0)
-    # wr.setFontbyPath("/usr/share/fonts/truetype/freefont/FreeSerif.ttf")
+    # wr.set_font(0)
+    # wr.set_font_by_path("/usr/share/fonts/truetype/freefont/FreeSerif.ttf")
     s3 = ttt.ttt(text, wr)
     exts = wr.extents
     # print exts
@@ -219,7 +219,7 @@ def ttt_segments(text, scale, subdivision=100):
 
 
 if __name__ == "__main__":
-    print ovd.version() + " " + ovd.build_type()
+    print("%s %s" % (ovd.version(), ovd.build_type()))
     # w=2500
     # h=1500
 
@@ -273,6 +273,6 @@ if __name__ == "__main__":
     # vd.filter_graph(ma)
 
     vod.setAll()
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
     myscreen.render()
     myscreen.iren.Start()

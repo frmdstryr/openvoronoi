@@ -160,7 +160,7 @@ def pocket_model(polygons, first_offset, second_offset=None, interior=True, N_of
 if __name__ == "__main__":
     w = 1024
     h = 1024
-    myscreen = ovdvtk.VTKScreen(width=w, height=h)  # a VTK window for drawing 
+    myscreen = ovdvtk.VTKScreen(width=w, height=h)  # a VTK window for drawing
     ovdvtk.drawOCLtext(myscreen, rev_text=openvoronoi.version())  # the OpenVoronoi text, revision, and date
 
     # rotate camera for 2D view
@@ -180,7 +180,7 @@ if __name__ == "__main__":
 
     import pycam.Importers.DXFImporter as importer
 
-    print "reading from DXF-file: ", sys.argv[1]
+    print("reading from DXF-file: %s" % sys.argv[1])
     model = importer.import_model(sys.argv[1])
     model.revise_directions()
 
@@ -198,7 +198,7 @@ if __name__ == "__main__":
 
     offset2vtk.drawOffsets2(myscreen, offset_loops)
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     myscreen.iren.Start()

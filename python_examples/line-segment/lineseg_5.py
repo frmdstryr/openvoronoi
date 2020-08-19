@@ -50,7 +50,7 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     # exit()
 
     # print "   ",2*Nmax," point-sites sites took {0:.3f}".format(times[0])," seconds, {0:.2f}".format( 1e6*float( times[0] )/(float(2*Nmax)*float(math.log10(2*Nmax))) ) ,"us/n*log(n)"
-    print "all point sites inserted. ",
+    print("all point sites inserted. ")
     vd.check()
 
     # nsegs = Nmax
@@ -108,7 +108,7 @@ if __name__ == "__main__":
     for s in id_list:
         if n <= nsegs and linesegs == 1:
             vd.addLineSite(s[0], s[1])
-            print n, " added line-segment"
+            print("%s added line-segment" % n)
         n = n + 1
     t_after = time.time()
     line_time = t_after - t_before
@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
     # s = id_list[nsegs]
     # vd.debug_on()
-    # vd.addLineSite( s[0], s[1], 10) 
+    # vd.addLineSite( s[0], s[1], 10)
     # seg = id_list[nsegs]
     # vd.addLineSite(seg[0],seg[1],10)
     # 4 delete-tree
@@ -134,16 +134,16 @@ if __name__ == "__main__":
     # vod.setVDText2(times)
 
     err = vd.getStat()
-    # print err 
-    print "got errorstats for ", len(err), " points"
+    # print err
+    print("got errorstats for %s points" % len(err))
     if len(err) > 1:
         minerr = min(err)
         maxerr = max(err)
-        print "min error= ", minerr
-        print "max error= ", maxerr
+        print("min error= %s" % minerr)
+        print("max error= %s" % maxerr)
 
-    print "num vertices: ", vd.numVertices()  # Nmax=200 gives 1856(187)
-    print "num SPLIT vertices: ", vd.numSplitVertices()
+    print("num vertices: %s" % vd.numVertices())  # Nmax=200 gives 1856(187)
+    print("num SPLIT vertices: %s" % vd.numSplitVertices())
     # nmax= 20 gives 175(13)
 
     calctime = t_after - t_before
@@ -153,7 +153,7 @@ if __name__ == "__main__":
 
     vod.setAll()
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     # w2if.Modified()

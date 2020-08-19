@@ -2,11 +2,11 @@ SET(test_name "cpptest_ttt_glyph" )
 
 MESSAGE(STATUS "configuring c++ test: " ${test_name})
 # the ttt lib
-find_library(TTT_LIBRARY 
+find_library(TTT_LIBRARY
             NAMES truetypetracer
             PATHS /usr/local/lib/truetypetracer
             DOC "ttt"
-            REQUIRED
+            OPTIONAL
 )
 include_directories( /usr/local/include/truetypetracer )
 	if( TTT_LIBRARY_FOUND )
@@ -43,7 +43,7 @@ include_directories( /usr/local/include/truetypetracer )
 
 	# --c options sets the glyph
 	# 0,1,2,3...51  corresponds to "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-	set( CHARS   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25) #  
+	set( CHARS   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25) #
 	set( CHARS2 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51) # 35
 
 # --s option sets the scale. 3e-4 is a big character, 1e-6 is tiny

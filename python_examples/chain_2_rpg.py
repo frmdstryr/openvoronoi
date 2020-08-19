@@ -43,7 +43,7 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -75,17 +75,17 @@ if __name__ == "__main__":
     t_before = time.time()
     for p in pts:
         id_list.append(vd.addVertexSite(p))
-        print m, " added vertex "
+        print("%s added vertex " % m)
         m = m + 1
-    print "polygon is: "
+    print("polygon is: ")
     for idx in id_list:
-        print idx, "-",
-    print "."
+        print("%s-" % idx)
+    print(".")
 
     t_after = time.time()
     times.append(t_after - t_before)
 
-    print "all point sites inserted. ",
+    print("all point sites inserted. ")
     vd.check()
     # vd.debug_on()
 
@@ -138,21 +138,21 @@ if __name__ == "__main__":
 
     err = vd.getStat()
     # print err
-    print "got errorstats for ", len(err), " points"
+    print("got errorstats for %s points" % len(err))
     if len(err) > 1:
         minerr = min(err)
         maxerr = max(err)
-        print "min error= ", minerr
-        print "max error= ", maxerr
+        print("min error= %s" % minerr)
+        print("max error= %s" % maxerr)
 
-    print "num vertices: ", vd.numVertices()
-    print "num SPLIT vertices: ", vd.numSplitVertices()
+    print("num vertices: %s" % vd.numVertices())
+    print("num SPLIT vertices: %s" % vd.numSplitVertices())
 
     calctime = t_after - t_before
 
     vod.setAll()
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     # w2if.Modified()

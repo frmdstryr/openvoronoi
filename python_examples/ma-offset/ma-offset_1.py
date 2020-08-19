@@ -14,23 +14,23 @@ def insert_polygon_points(vd, polygon):
     for p in polygon:
         pts.append(ovd.Point(p[0], p[1]))
     id_list = []
-    print "inserting ", len(pts), " point-sites:"
+    print("inserting %s point-sites:" % len(pts))
     m = 0
     for p in pts:
         id_list.append(vd.addVertexSite(p))
-        print " ", m, " added vertex ", id_list[len(id_list) - 1]
+        print(" %s added vertex %s" % (m, id_list[len(id_list) - 1]))
         m = m + 1
     return id_list
 
 
 def insert_polygon_segments(vd, id_list):
     j = 0
-    print "inserting ", len(id_list), " line-segments:"
+    print("inserting %s line-segments:" % len(id_list))
     for n in range(len(id_list)):
         n_nxt = n + 1
         if n == (len(id_list) - 1):
             n_nxt = 0
-        print " ", j, "inserting segment ", id_list[n], " - ", id_list[n_nxt]
+        print(" %s inserting segment %s - %s" % (j, id_list[n],  id_list[n_nxt]))
         vd.addLineSite(id_list[n], id_list[n_nxt])
         j = j + 1
 
@@ -74,10 +74,10 @@ def ttt_segments(text, scale):
     wr.cubic = False
 
     wr.conic_biarc_subdivision = 10  # this has no effect?
-    wr.conic_line_subdivision = 50  # this increases nr of points 
+    wr.conic_line_subdivision = 50  # this increases nr of points
     wr.cubic_biarc_subdivision = 10  # no effect?
     wr.cubic_line_subdivision = 10  # no effect?
-    wr.setFont(3)
+    wr.set_font(3)
 
     wr.scale = float(1) / float(scale)
     ttt.ttt(text, wr)
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -145,8 +145,8 @@ if __name__ == "__main__":
     segs = modify_segments(segs)
 
     times = insert_many_polygons(vd, segs)
-    print "all sites inserted. "
-    print "VD check: ", vd.check()
+    print("all sites inserted. ")
+    print("VD check: %s" % vd.check())
 
     pi = ovd.PolygonInterior(True)
     vd.filter_graph(pi)
@@ -166,6 +166,6 @@ if __name__ == "__main__":
 
     vod.setVDText2(times)
     vod.setAll()
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
     myscreen.render()
     myscreen.iren.Start()

@@ -9,19 +9,21 @@
 find_path(QD_INCLUDE_DIR
     NAMES qd/qd_real.h qd_real.h
     PATHS /usr/include
-    /usr/local/include
+          /usr/local/include
+          $ENV{CONDA_PREFIX}/include/
 )
 
 find_library(QD_LIBRARY
     NAMES libqd qd
     PATHS /usr/lib
         /usr/local/lib
+        $ENV{CONDA_PREFIX}/lib/
    ENV QDROOT
    ENV LD_LIBRARY_PATH
    ENV LIBRARY_PATH
 )
 
-    
+
 if(QD_LIBRARY)
     set(QD_LIBRARY_ optimized ${QD_LIBRARY} debug ${QD_LIBRARY})
     set(QD_LIBRARY ${QD_LIBRARY_} CACHE FILEPATH "The QD library")

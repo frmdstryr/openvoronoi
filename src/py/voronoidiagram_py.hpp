@@ -1,19 +1,19 @@
 /*
  *  Copyright (c) 2010-2012 Anders Wallin (anders.e.e.wallin "at" gmail.com).
- *  
- *  This file is part of Openvoronoi 
+ *
+ *  This file is part of Openvoronoi
  *  (see https://github.com/aewallin/openvoronoi).
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 2.1 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -25,24 +25,23 @@
 
 #include "common/numeric.hpp"
 
+
+#include <pybind11/pybind11.h>
+
+
+namespace py = pybind11;
+
 using namespace ovd::numeric;
 
 namespace ovd {
 namespace pyovd {
-    
-/// python wrapper for Point (to allow reading/writing objects using pickle)
-struct point_pickle_suite : boost::python::pickle_suite {
-    /// arguments of Point to store in pickle
-    static boost::python::tuple getinitargs(Point const& p) {
-        return boost::python::make_tuple( p.x, p.y );
-    }
-};
+
 
 /// \brief python wrapper for VoronoiDiagram
 class VoronoiDiagram_py : public VoronoiDiagram {
 public:
     /// create diagram with given far-radius and number of bins
-    VoronoiDiagram_py(double far, unsigned int n_bins) 
+    VoronoiDiagram_py(double far, unsigned int n_bins)
         : VoronoiDiagram( far, n_bins) {
         _edge_points=40;
         null_edge_offset=0.01;
@@ -55,7 +54,7 @@ public:
     //int insert_point_site2(const Point& p, int step) {
     //    return insert_point_site(p,step);
     //}
-    
+
     /// 3-parameter line-insert
     bool insert_line_site2(int idx1, int idx2) {
         return insert_line_site( idx1, idx2);
@@ -73,19 +72,19 @@ public:
         null_edge_offset=ofs;
     }
     /// return list of generators/sites to python
-    boost::python::list getGenerators()  {
-        boost::python::list plist;
+    py::list getGenerators()  {
+        py::list plist;
         BOOST_FOREACH( HEVertex v, g.vertices() ) {
             if ( g[v].type == POINTSITE ) {
-                boost::python::list pd;
+                py::list pd;
                 Point offset(0,0);
                 //double ofs= 0.01;
-                if ( (g[v].alfa!=-1) ) { 
-                    boost::tie(offset.x, offset.y )  = numeric::diangle_xy( g[v].alfa );
+                if ( (g[v].alfa!=-1) ) {
+                    std::tie(offset.x, offset.y )  = numeric::diangle_xy( g[v].alfa );
                     //offset.x = null_edge_offset*numeric::diangle_x( g[v].alfa );
                     //offset.y = null_edge_offset*numeric::diangle_y( g[v].alfa );
                 }
-                    
+
                 pd.append( g[v].position+offset*null_edge_offset );
                 pd.append( g[v].dist() );
                 pd.append( g[v].status );
@@ -96,31 +95,31 @@ public:
         return plist;
     }
     /// return vertex error statistics
-    boost::python::list getStat() {
-        boost::python::list elist;
+    py::list getStat() {
+        py::list elist;
         BOOST_FOREACH( double  e, vpos->get_stat() ) {
             elist.append(e);
         }
         return elist;
     }
-    
+
     /// return list of vd vertices to python
-    boost::python::list getVoronoiVertices()  {
-        boost::python::list plist;
+    py::list getVoronoiVertices()  {
+        py::list plist;
         BOOST_FOREACH( HEVertex v, g.vertices() ) {
-            //if ( g[v].type == NORMAL || g[v].type == ENDPOINT || 
-            //   g[v].type == SEPPOINT || g[v].type == APEX || 
-            //   g[v].type == OUTER || g[v].type == SPLIT) 
+            //if ( g[v].type == NORMAL || g[v].type == ENDPOINT ||
+            //   g[v].type == SEPPOINT || g[v].type == APEX ||
+            //   g[v].type == OUTER || g[v].type == SPLIT)
             {
-                boost::python::list pd;
+                py::list pd;
                 Point offset(0,0);
                 //double ofs= 0.01;
                 if ( (g[v].alfa!=-1) ) {
-                    boost::tie(offset.x, offset.y )  = numeric::diangle_xy( g[v].alfa ); 
+                    std::tie(offset.x, offset.y )  = numeric::diangle_xy( g[v].alfa );
                     //offset.x = null_edge_offset*numeric::diangle_x( g[v].alfa );
                     //offset.y = null_edge_offset*numeric::diangle_y( g[v].alfa );
                 }
-                
+
                 pd.append( g[v].position+offset*null_edge_offset );
                 pd.append( g[v].dist() );
                 pd.append( g[v].status );
@@ -133,25 +132,25 @@ public:
         return plist;
     }
     /// return list of the three special far-vertices to python
-    boost::python::list getFarVoronoiVertices()  {
-        boost::python::list plist;
+    py::list getFarVoronoiVertices()  {
+        py::list plist;
         BOOST_FOREACH( HEVertex v, g.vertices() ) {
             if ( g.degree( v ) == 4 ) {
-                boost::python::list pd;
+                py::list pd;
                 pd.append( g[v].position );
                 pd.append( g[v].dist() );
-                
+
                 plist.append(pd);
             }
         }
         return plist;
     }
     /// return arc-site points
-    boost::python::list get_arc_points(HEEdge e) {
-        boost::python::list out;
+    py::list get_arc_points(HEEdge e) {
+        py::list out;
         HEFace f = g[e].face;
         ArcSite* s = dynamic_cast<ArcSite*>( g[f].site );
-        
+
         Point start = s->start()-s->center();
         Point end = s->end()-s->center();
         // offset in tangent-directio
@@ -169,12 +168,11 @@ public:
         double theta1 = atan2(start.x,start.y);
         double theta2 = atan2(end.x,end.y);
 
-        double CIRCLE_FUZZ = 1e-9;
         if (!s->cw()) { //idea from emc2 / cutsim g-code interp G2/G3
             while ( (theta2 - theta1) > -CIRCLE_FUZZ)  // required only for multi-turn arcs??
                 theta2 -= 2*M_PI;
         } else {
-            while( (theta2 - theta1) < CIRCLE_FUZZ) 
+            while( (theta2 - theta1) < CIRCLE_FUZZ)
                 theta2 += 2*M_PI;
         }
 
@@ -185,7 +183,7 @@ public:
         int steps = int( arclength / dlength );
         //print "arc subdivision steps: ",steps
         double rsteps = 1/(double)steps;
-        double dc = cos(-dtheta*rsteps); // delta-cos  
+        double dc = cos(-dtheta*rsteps); // delta-cos
         double ds = sin(-dtheta*rsteps); // delta-sin
 
         out.append( s->center() + start );
@@ -193,7 +191,7 @@ public:
         for(int i=0;i<steps;i++) { // in range(steps):
             tr = rotate( tr, dc, ds); // rotate center-start vector by a small amount
             Point pt = s->center() + tr; //current = ovd.Point(x,y)
-            out.append(pt); 
+            out.append(pt);
         }
         return out;
     }
@@ -204,18 +202,18 @@ public:
         return Point(x,y);
     }
     /// return list of vd-edges to python
-    boost::python::list getVoronoiEdges()  {
-        boost::python::list edge_list;
+    py::list getVoronoiEdges()  {
+        py::list edge_list;
         BOOST_FOREACH( HEEdge edge, g.edges() ) { // loop through each edge
                 if (!g[edge].valid) continue;
-                boost::python::list edge_data;
-                boost::python::list point_list; // the endpoints of each edge
+                py::list edge_data;
+                py::list point_list; // the endpoints of each edge
                 HEVertex v1 = g.source( edge );
                 HEVertex v2 = g.target( edge );
                 // these edge-types are drawn as a single line from source to target.
-                if ( (g[edge].type == SEPARATOR) || (g[edge].type == LINE) || 
-                     (g[edge].type == LINESITE) || (g[edge].type == OUTEDGE) || 
-                     (g[edge].type == LINELINE)  || (g[edge].type == PARA_LINELINE)) { // 
+                if ( (g[edge].type == SEPARATOR) || (g[edge].type == LINE) ||
+                     (g[edge].type == LINESITE) || (g[edge].type == OUTEDGE) ||
+                     (g[edge].type == LINELINE)  || (g[edge].type == PARA_LINELINE)) { //
                     point_list.append( g[v1].position );
                     point_list.append( g[v2].position );
                 } else if ( g[edge].type == PARABOLA || g[edge].type == HYPERBOLA  ) { // these edge-types are drawn as polylines with edge_points number of points
@@ -229,13 +227,13 @@ public:
                         Point pt = g[edge].point(t);
                         point_list.append(pt);
                     }
-                    
+
                 } else if ( g[edge].type == ARCSITE  ) {
                     // points corresponding to arc-site
                     point_list = get_arc_points(edge);
                 } else {
                     //assert(0);
-                } 
+                }
                 edge_data.append( point_list );
                 edge_data.append( g[edge].type );
                 edge_data.append( g[v1].status ); // source status
@@ -245,14 +243,14 @@ public:
         }
         return edge_list;
     }
-    
+
     /// return list of vertices on given face
-    boost::python::list get_face_vertices(HEFace f)  {
-        boost::python::list vertex_list;
+    py::list get_face_vertices(HEFace f)  {
+        py::list vertex_list;
         BOOST_FOREACH( HEEdge edge, g.edges() ) { // loop through each edge
             if (!g[edge].valid) continue;
-            //boost::python::list edge_data;
-            //boost::python::list point_list; // the endpoints of each edge
+            //py::list edge_data;
+            //py::list point_list; // the endpoints of each edge
             if ( g[edge].face == f) {
                 HEVertex v1 = g.source( edge );
                 vertex_list.append( g[v1].index );
@@ -263,26 +261,26 @@ public:
 
     /// get edges for drawing. with null-face offsets.
     // NOTE: no g[edge].valid check here!?
-    boost::python::list getVoronoiEdgesOffset()  {
-        boost::python::list edge_list;
+    py::list getVoronoiEdgesOffset()  {
+        py::list edge_list;
         BOOST_FOREACH( HEEdge edge, g.edges() ) { // loop through each edge
-                boost::python::list edge_data;
-                boost::python::list point_list; // the endpoints of each edge
+                py::list edge_data;
+                py::list point_list; // the endpoints of each edge
                 HEVertex v1 = g.source( edge );
                 HEVertex v2 = g.target( edge );
                 // these edge-types are drawn as a single line from source to target.
-                if ( (g[edge].type == SEPARATOR) || (g[edge].type == LINE) || 
-                     (g[edge].type == LINESITE) || (g[edge].type == OUTEDGE) || 
+                if ( (g[edge].type == SEPARATOR) || (g[edge].type == LINE) ||
+                     (g[edge].type == LINESITE) || (g[edge].type == OUTEDGE) ||
                      (g[edge].type == LINELINE)  || (g[edge].type == PARA_LINELINE)  ) {
                     Point v1_offset(0,0);
                     Point v2_offset(0,0);
                     //double ofs= 0.01;
                     if ( (g[v1].alfa!=-1) ) { // || (g[v2].alfa!=-1) ) {
-                        boost::tie(v1_offset.x, v1_offset.y )  = numeric::diangle_xy( g[v1].alfa );
+                        std::tie(v1_offset.x, v1_offset.y )  = numeric::diangle_xy( g[v1].alfa );
                         //v1_offset.y = null_edge_offset*numeric::diangle_y( g[v1].alfa );
                     }
                     if ( (g[v2].alfa!=-1) ) { // || (g[v2].alfa!=-1) ) {
-                        boost::tie(v2_offset.x, v2_offset.y ) = numeric::diangle_xy( g[v2].alfa );
+                        std::tie(v2_offset.x, v2_offset.y ) = numeric::diangle_xy( g[v2].alfa );
                         //= null_edge_offset*numeric::diangle_y( g[v2].alfa );
                     }
                     point_list.append( g[v1].position + v1_offset*null_edge_offset );
@@ -295,7 +293,7 @@ public:
                         for(int n=0;n<nmax;n++) {
                             double alfa = g[v1].alfa + n*(g[v2].alfa-g[v1].alfa)/(nmax-1);
                             Point offset(0,0);
-                            boost::tie(offset.x,offset.y) = numeric::diangle_xy( alfa );
+                            std::tie(offset.x,offset.y) = numeric::diangle_xy( alfa );
                             point_list.append( g[v1].position + offset*null_edge_offset );
                         }
                     } else {
@@ -304,18 +302,18 @@ public:
                         for(int n=0;n<nmax;n++) {
                             double alfa = g[v1].alfa + n*(4-g[v1].alfa)/(nmax-1);
                             Point offset(0,0);
-                            boost::tie(offset.x,offset.y) = numeric::diangle_xy( alfa );
+                            std::tie(offset.x,offset.y) = numeric::diangle_xy( alfa );
                             point_list.append( g[v1].position + offset*null_edge_offset );
                         }
                         nmax = std::max( (int)((g[v2].alfa-0)/dalfa), 5 );
                         for(int n=0;n<nmax;n++) { // from zero to v2
                             double alfa = 0 + n*(g[v2].alfa-0)/(nmax-1);
                             Point offset(0,0);
-                            boost::tie(offset.x,offset.y) = numeric::diangle_xy( alfa );
+                            std::tie(offset.x,offset.y) = numeric::diangle_xy( alfa );
                             point_list.append( g[v1].position + offset*null_edge_offset );
                         }
                     }
-                    
+
                 } else if ( g[edge].type == PARABOLA || g[edge].type == HYPERBOLA ) { // these edge-types are drawn as polylines with edge_points number of points
                     double t_src = g[v1].dist();
                     double t_trg = g[v2].dist();
@@ -328,13 +326,13 @@ public:
                         if (t>null_edge_offset) // don't draw inside the null-face circle
                             point_list.append(pt);
                     }
-                    
+
                 } else if ( g[edge].type == ARCSITE  ) {
                     // points corresponding to arc-site
                     point_list = get_arc_points(edge);
                 } else {
                     //assert(0);
-                } 
+                }
                 edge_data.append( point_list );
                 edge_data.append( g[edge].type );
                 edge_data.append( g[v1].status ); // source status
@@ -343,12 +341,12 @@ public:
         }
         return edge_list;
     }
-    
+
     /// return edges and generators to python
-    boost::python::list getEdgesGenerators()  {
-        boost::python::list edge_list;
+    py::list getEdgesGenerators()  {
+        py::list edge_list;
         BOOST_FOREACH( HEEdge edge, g.edges() ) {
-                boost::python::list point_list; // the endpoints of each edge
+                py::list point_list; // the endpoints of each edge
                 HEVertex v1 = g.source( edge );
                 HEVertex v2 = g.target( edge );
                 Point src = g[v1].position;
@@ -365,14 +363,14 @@ public:
     }
 
     /// return IN-IN edges. for animation/visualization only, not needed in main algorithm
-    EdgeVector find_in_in_edges() { 
+    EdgeVector find_in_in_edges() {
         assert( !v0.empty() );
         EdgeVector output; // new vertices generated on these edges
-        BOOST_FOREACH( HEVertex v, v0 ) {                                   
+        BOOST_FOREACH( HEVertex v, v0 ) {
             assert( g[v].status == IN ); // all verts in v0 are IN
             BOOST_FOREACH( HEEdge edge, g.out_edges( v ) ) {
                 HEVertex adj_vertex = g.target( edge );
-                if ( g[adj_vertex].status == IN ) 
+                if ( g[adj_vertex].status == IN )
                     output.push_back(edge); // this is an IN-IN edge
             }
         }
@@ -397,18 +395,18 @@ public:
             current_edge = g[current_edge].next;
         } while( current_edge != start_edge );
         return out.size();
-    }    
+    }
     /// return list of face-statistics (e.g. for analysis of poisson voronoi diagrams)
-    boost::python::list getFaceStats()  {
-        boost::python::list stats;
+    py::list getFaceStats()  {
+        py::list stats;
         const double radius_limit = 0.7;
         for(HEFace f=0 ; f < g.num_faces() ; f++ ) {
             // only accept if site is within radius
             Point pt = g[f].site->position();
             if ( pt.norm() < radius_limit ) {
-                boost::python::list data;
+                py::list data;
                 data.append( f );
-                data.append( g[f].site->position() );  
+                data.append( g[f].site->position() );
                 data.append( num_face_edges(f) );
                 stats.append(data);
             }
@@ -417,7 +415,7 @@ public:
     }
 private:
     /// number of points to plot on quadratic edges
-    int _edge_points; 
+    int _edge_points;
     /// amount to offset null-face edges
     double null_edge_offset;
 };

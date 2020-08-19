@@ -48,7 +48,7 @@ if __name__ == "__main__":
     zmult = 4
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
 
     Nmax = 2000
     us_guess = 250
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     print "distribution of faces with n edges in poisson vd with", Nmax, " point-sites:"
     print hist2
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     # myscreen.render()    
     # myscreen.iren.Start()

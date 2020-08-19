@@ -52,10 +52,11 @@ MESSAGE(STATUS " Your linker is = " ${CMAKE_LINKER})
 #
 if (UNIX AND NOT APPLE)
   MESSAGE(STATUS "setting strict gcc options: -Wall -Werror etc...")
-  add_definitions(-Werror -Wall -Wundef -Wno-error=uninitialized -Wshadow  -Wno-long-long -Wno-deprecated -pedantic -pedantic-errors)
+  # Removed -Wundef and -Wshadow since boost doesn't work with these...
+  add_definitions(-Werror -Wall -Wno-error=uninitialized -Wno-long-long -Wno-deprecated -pedantic -pedantic-errors)
 
   # some reasons why we don't enable certain errors:
-  # -Wfloat-equal        gives warning when comparing float/double with != or ==:  
+  # -Wfloat-equal        gives warning when comparing float/double with != or ==:
   # -Winline             gives warnings for BGL
 
   add_definitions(-fPIC)
@@ -80,8 +81,8 @@ option(BUILD_PYTHON_MODULE "Build python-module? " ON) # building the python-mod
 
 option(BUILD_DOC "Build doxygen documentation? " ON)
 
-option(BUILD_CPP_TESTS "Build c++ tests?" ON) 
-option(BUILD_PY_TESTS "Build/configure Python tests?" ON) 
+option(BUILD_CPP_TESTS "Build c++ tests?" ON)
+option(BUILD_PY_TESTS "Build/configure Python tests?" ON)
 
 
 if (CMAKE_BUILD_TYPE MATCHES "Profile")
@@ -112,7 +113,7 @@ endif (CMAKE_BUILD_TYPE MATCHES "Coverage")
 # header file search path
 MESSAGE(STATUS "Your system is: ${CMAKE_SYSTEM_NAME}")
 IF( ${BUILD_PYTHON_MODULE} MATCHES ON)
-  find_package (PythonLibs 2.7 EXACT REQUIRED) 
+  find_package (PythonLibs $ENV{PY_VER} EXACT REQUIRED)
   include_directories(${PYTHON_INCLUDE_DIRS})
   MESSAGE(STATUS "Python includes: " ${PYTHON_INCLUDE_DIRS})
 ENDIF()
@@ -126,18 +127,19 @@ if(Boost_FOUND)
   MESSAGE(STATUS "Boost_INCLUDE_DIRS are: " ${Boost_INCLUDE_DIRS})
   MESSAGE(STATUS "boost_LIBRARY_DIRS is: " ${Boost_LIBRARY_DIRS})
   MESSAGE(STATUS "Boost_LIBRARIES is: " ${Boost_LIBRARIES})
-  
+
 endif()
 
 # find boost-python
 IF( ${BUILD_PYTHON_MODULE} MATCHES ON)
-  find_package( Boost COMPONENTS python REQUIRED)
-  MESSAGE(STATUS "Boost_PYTHON_LIBRARY is: " ${Boost_PYTHON_LIBRARY})
+  #find_package( Boost COMPONENTS python REQUIRED)
+  #MESSAGE(STATUS "Boost_PYTHON_LIBRARY is: " ${Boost_PYTHON_LIBRARY})
+  find_package(pybind11 REQUIRED)
 ENDIF()
 
 # find the qd library
 set( CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR} ) # Findqd.cmake is in this dir
-find_package( qd REQUIRED ) 
+find_package( qd REQUIRED )
 include_directories(${QD_INCLUDE_DIR})
 
 message( STATUS "libqd include dir = ${QD_INCLUDE_DIR}")
@@ -183,26 +185,26 @@ set( OVD_INCLUDE_FILES
   ${OpenVoronoi_SOURCE_DIR}/medial_axis_pocket.hpp
   ${OpenVoronoi_SOURCE_DIR}/polygon_interior_filter.hpp
   ${OpenVoronoi_SOURCE_DIR}/island_filter.hpp
-  
+
   ${CMAKE_CURRENT_BINARY_DIR}/version_string.hpp
   ${CMAKE_SOURCE_DIR}/version.hpp
   )
 
 set( OVD_INCLUDE_COMMON_FILES
-  ${OpenVoronoi_SOURCE_DIR}/common/numeric.hpp  
+  ${OpenVoronoi_SOURCE_DIR}/common/numeric.hpp
   ${OpenVoronoi_SOURCE_DIR}/common/point.hpp
   ${OpenVoronoi_SOURCE_DIR}/common/halfedgediagram.hpp
-  
+
   )
 
 set( OVD_INCLUDE_UTIL_FILES
-  ${OpenVoronoi_SOURCE_DIR}/utility/vd2svg.hpp    
+  ${OpenVoronoi_SOURCE_DIR}/utility/vd2svg.hpp
   ${OpenVoronoi_SOURCE_DIR}/utility/simple_svg_1.0.0.hpp
   )
 
 
 set( OVD_INCLUDE_SOLVERS_FILES
-  ${OpenVoronoi_SOURCE_DIR}/solvers/solution.hpp  
+  ${OpenVoronoi_SOURCE_DIR}/solvers/solution.hpp
   ${OpenVoronoi_SOURCE_DIR}/solvers/solver.hpp
 
   ${OpenVoronoi_SOURCE_DIR}/solvers/solver_lll.hpp
@@ -210,7 +212,7 @@ set( OVD_INCLUDE_SOLVERS_FILES
 
   ${OpenVoronoi_SOURCE_DIR}/solvers/solver_ppp.hpp
   ${OpenVoronoi_SOURCE_DIR}/solvers/solver_qll.hpp
-  
+
   ${OpenVoronoi_SOURCE_DIR}/solvers/solver_sep.hpp
   ${OpenVoronoi_SOURCE_DIR}/solvers/solver_alt_sep.hpp
   )
@@ -226,11 +228,11 @@ add_library(
   )
 set_target_properties(libopenvoronoi PROPERTIES PREFIX "")
 if (NOT APPLE)
-  set_target_properties(libopenvoronoi PROPERTIES VERSION ${MY_VERSION}) 
+  set_target_properties(libopenvoronoi PROPERTIES VERSION ${MY_VERSION})
 endif (NOT APPLE)
-# link against libqd here. 
+# link against libqd here.
 # an alternative is to link libqd when an application using openvoronoi is built.
-target_link_libraries(libopenvoronoi ${Boost_LIBRARIES} ${QD_LIBRARY}) 
+target_link_libraries(libopenvoronoi ${Boost_LIBRARIES} ${QD_LIBRARY})
 
 # c++lib for coverage testing
 add_library(
@@ -254,22 +256,22 @@ IF( ${BUILD_PYTHON_MODULE} MATCHES ON)
   message(STATUS "PYTHON_EXECUTABLE = ${PYTHON_EXECUTABLE}")
   message(STATUS "PYTHON_INCLUDE_DIRS = ${PYTHON_INCLUDE_DIRS}")
   # static c++ library, linked with the python module below
-  add_library(
-    openvoronoi_static
-    STATIC
-    ${OVD_SRC}
-    )
+  #add_library(
+  #  openvoronoi_static
+  #  STATIC
+  #  ${OVD_SRC}
+  #  )
 
   # the Python module itself
-  add_library(
+  pybind11_add_module(
     openvoronoi
     MODULE
     py/open_voronoi_py.cpp
     )
-  target_link_libraries(openvoronoi openvoronoi_static ${Boost_LIBRARIES} ${QD_LIBRARY} ${PYTHON_LIBRARIES}) 
-  set_target_properties(openvoronoi PROPERTIES PREFIX "") 
+  target_link_libraries(openvoronoi PUBLIC libopenvoronoi ${Boost_LIBRARIES} ${QD_LIBRARY} ${PYTHON_LIBRARIES})
+  set_target_properties(openvoronoi PROPERTIES PREFIX "")
   if (NOT APPLE)
-    set_target_properties(openvoronoi PROPERTIES VERSION ${MY_VERSION}) 
+    set_target_properties(openvoronoi PROPERTIES VERSION ${MY_VERSION})
   endif (NOT APPLE)
   # this figures out where to install the Python modules
   execute_process(
@@ -287,7 +289,7 @@ IF( ${BUILD_PYTHON_MODULE} MATCHES ON)
   # this installs the python library
   install(
     TARGETS openvoronoi
-    LIBRARY 
+    LIBRARY
     DESTINATION ${Python_site_packages}
     )
 
@@ -304,7 +306,7 @@ ENDIF() # end Python module
 # this installs the c++ library
 install(
   TARGETS libopenvoronoi
-  LIBRARY 
+  LIBRARY
   DESTINATION lib/openvoronoi
   ARCHIVE DESTINATION lib/openvoronoi
   PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
@@ -361,11 +363,11 @@ add_custom_target(coverage-report
 # Debian package
 # "make package" will build a binary package
 # "make spackage" will build a source-package (for uploading to a PPA)
-include(deb/package_details.cmake) 
-add_custom_target(spackage 
-  ${CMAKE_COMMAND} -D SRC_DIR:STRING=${CMAKE_SOURCE_DIR} 
-  -D MY_VERSION:STRING=${MY_VERSION} 
+include(deb/package_details.cmake)
+add_custom_target(spackage
+  ${CMAKE_COMMAND} -D SRC_DIR:STRING=${CMAKE_SOURCE_DIR}
+  -D MY_VERSION:STRING=${MY_VERSION}
   -C ${CMAKE_SOURCE_DIR}/deb/package_details.cmake # a lot of variables etc. defined here
   -P ${CMAKE_CURRENT_SOURCE_DIR}/deb/DebSourcePPA.cmake # the script that builds a debian package
-  ) 
+  )
 include(CPack) # this should be last

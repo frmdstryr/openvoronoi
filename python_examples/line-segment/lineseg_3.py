@@ -24,7 +24,7 @@ def writeFrame(w2if, lwr, n):
 def regularGridGenerators(far, Nmax):
     # REGULAR GRID
     rows = int(math.sqrt(Nmax))
-    print "rows= ", rows
+    print("rows= %s" % rows)
     gpos = [-0.7 * far, 1.4 * far / float(rows - 1)]  # start, stride
     plist = []
     for n in range(rows):
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     # plist = regularGridGenerators(far, Nmax)
     # plist = circleGenerators(far, Nmax)
 
-    # plist = randomGenerators(far, Nmax) 
+    # plist = randomGenerators(far, Nmax)
     # plist = []
     # plist.append( ovd.Point(0.0,0.1) )
     # plist.append( ovd.Point(0,0.9) )
@@ -124,7 +124,7 @@ if __name__ == "__main__":
     n = 0
     id_list = []
     for p in plist:
-        print n, " adding ", p
+        print("%s adding %s" % (n, p))
         id_list.append(vd.addVertexSite(p))
         n = n + 1
 
@@ -145,7 +145,7 @@ if __name__ == "__main__":
     #    ids.append( id_list[n] )
     # segs.append( [17,13] )
     # segs.append( [21,34] )
-    # segs.append( [26,44] ) 
+    # segs.append( [26,44] )
     # id1 = id_list[0]
     # id2 = id_list[1]
     # id3 = id_list[2]
@@ -161,12 +161,12 @@ if __name__ == "__main__":
     calctime = t_after - t_before
     if Nmax == 0:
         Nmax = 1
-    print " VD done in ", calctime, " s, ", calctime / Nmax, " s per generator"
+    print(" VD done in %s s, %s s per generator" % (calctime, calctime / Nmax))
 
     vod.setAll()
     myscreen.render()
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     myscreen.iren.Start()

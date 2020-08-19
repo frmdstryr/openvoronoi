@@ -26,10 +26,10 @@ def drawLoops(myscreen, loops, loopColor):
                     ovdvtk.Line(p1=(p[0], p[1], 0), p2=(first_point[0], first_point[1], 0), color=loopColor))
             else:
                 myscreen.addActor(ovdvtk.Line(p1=(previous[0], previous[1], 0), p2=(p[0], p[1], 0), color=loopColor))
-                print "line ", previous, " to ", p
+                print("line %s to %s" % (previous, p))
                 previous = p
             n = n + 1
-        print "rendered loop ", nloop, " with ", len(lop), " points"
+        print("rendered loop %s with %s points" % (nloop, len(lop)))
         nloop = nloop + 1
 
 
@@ -69,17 +69,17 @@ def draw_ttt(myscreen, text, x, y, scale):
     wr.conic_line_subdivision = 10  # this increasesn nr of points to 366
     wr.cubic_biarc_subdivision = 10  # no effect?
     wr.cubic_line_subdivision = 10  # no effect?
-    wr.setFont(2)
+    wr.set_font(2)
     s3 = ttt.ttt(text, wr)
     ext = wr.extents
     dx = ext.maxx - ext.minx
 
     segs = wr.get_segments()
     segs = translate(segs, x, y)
-    print "number of polygons: ", len(segs)
+    print("number of polygons: %s" % len(segs))
     np = 0
     for s in segs:
-        print " polygon ", np, " has ", len(s), " points"
+        print(" polygon %s has %s points" % (np, len(s)))
         np = np + 1
     segs = modify_segments(segs)
     drawLoops(myscreen, segs, ovdvtk.yellow)
@@ -88,7 +88,7 @@ def draw_ttt(myscreen, text, x, y, scale):
 # this script only draws geometry from ttt
 # no voronoi-diagram is created!
 if __name__ == "__main__":
-    print "ttt version = ", ttt.version()
+    print("ttt version = %s" % ttt.version())
     # w=2500
     # h=1500
 
@@ -117,13 +117,13 @@ if __name__ == "__main__":
     #myscreen.addActor(ca)
     #ca = ovdvtk.Line(p1=(0, 0, 0), p2=(1,1,0), color=ovdvtk.yellow)
     #myscreen.addActor(ca)
-        
+
     draw_ttt(myscreen, "A", 0, 0, 10000)
     # draw_ttt(myscreen, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", -0.5,0,80000)
     # draw_ttt(myscreen, "abcdefghijklmnopqrstuvwxyz", -0.5,-0.1,80000)
     # draw_ttt(myscreen, "1234567890*", -0.5,-0.2,80000)
     # draw_ttt(myscreen, "m", -0.5,-0.2,80000)
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     myscreen.iren.Start()

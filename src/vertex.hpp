@@ -1,19 +1,19 @@
 /*
  *  Copyright (c) 2010-2012 Anders Wallin (anders.e.e.wallin "at" gmail.com).
- *  
- *  This file is part of Openvoronoi 
+ *
+ *  This file is part of Openvoronoi
  *  (see https://github.com/aewallin/openvoronoi).
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 2.1 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -28,8 +28,8 @@
 
 namespace ovd {
 
-/// As we incrementally construct the diagram voronoi-vertices 
-/// can have one of these four different states. 
+/// As we incrementally construct the diagram voronoi-vertices
+/// can have one of these four different states.
 enum VertexStatus {
     OUT,          /*!< OUT-vertices will not be deleted */
     IN,           /*!< IN-vertices will be deleted */
@@ -37,7 +37,7 @@ enum VertexStatus {
     NEW           /*!< NEW-vertices are constructed on OUT-IN edges */
 };
 
-/// This is the permanent type of a vertex in the diagram. 
+/// This is the permanent type of a vertex in the diagram.
 enum VertexType {
     OUTER,      /*!< OUTER vertices are special vertices added in init(), should have degree==4 */
     NORMAL,     /*!< NORMAL are normal voronoi-vertices, should have degree==6  (degree 3 graph with double-edges) */
@@ -51,12 +51,13 @@ enum VertexType {
 
 
 
-                                     
+
 /// \brief A vertex in the voronoi diagram
 ///
 /// an object of this type is held in the BGL-graph for each vertex.
 class VoronoiVertex {
 public:
+    VoronoiVertex();
     VoronoiVertex( Point p, VertexStatus st, VertexType t);
     VoronoiVertex( Point p, VertexStatus st, VertexType t, double init_radius);
     VoronoiVertex( Point pos, VertexStatus st, VertexType t, Point initDist);
@@ -70,12 +71,12 @@ public:
     void init_dist(const Point& p);
     double dist(const Point& p) const;
     void zero_dist();
-    double dist() const; 
-    double in_circle(const Point& p) const; 
-    static void reset_count(); 
+    double dist() const;
+    double in_circle(const Point& p) const;
+    static void reset_count();
     void set_alfa(const Point& dir); ///< set alfa. This is only for debug-drawing of null-face vertices.
 // DATA
-    
+
     int index; ///< unique integer index of vertex
     VertexStatus status; ///< vertex status. updated/changed during an incremental graph update
     VertexType type; ///< The type of the vertex. Never(?) changes
@@ -84,7 +85,7 @@ public:
     Point position; ///< the position of the vertex.
     double k3;  ///< the offset-direction {-1,+1} of this vertex to the newly inserted site.
     double alfa; ///< diangle for a null-vertex. only for debug-drawing
-    HEFace null_face; ///< if this is a null-face, a handle to the null-face 
+    HEFace null_face; ///< if this is a null-face, a handle to the null-face
     HEFace face; ///< the face of this vertex, if the vertex is a point-site
 protected:
     void init();
@@ -98,8 +99,8 @@ protected:
     typedef std::map<VertexType, unsigned int> VertexDegreeMap;
     static VertexDegreeMap expected_degree; ///< map for checking topology correctness
     double r; ///< clearance-disk radius, i.e. the closest Site is at this distance
-private:
-    VoronoiVertex();
+// private:
+//     VoronoiVertex();
 };
 
 } // end namespace

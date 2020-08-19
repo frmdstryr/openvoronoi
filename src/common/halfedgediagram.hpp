@@ -253,9 +253,9 @@ void add_vertex_in_edge( Vertex v, Edge e) {
     Edge e1 = boost::add_edge( esource, v, g).first;
     Edge te2 = boost::add_edge( v, esource,  g).first;
     g[e1].twin = te2; g[te2].twin = e1;
-    //boost::tie(e1,te2) = add_twin_edges( esource, v ); 
+    //std::tie(e1,te2) = add_twin_edges( esource, v ); 
     //Edge e2, te1;
-    //boost::tie(e2,te1) = add_twin_edges( v, etarget );    
+    //std::tie(e2,te1) = add_twin_edges( v, etarget );    
     Edge e2 = boost::add_edge( v, etarget, g).first;
     Edge te1 = boost::add_edge( etarget, v,  g).first;
     g[e2].twin = te1; g[te1].twin = e2;
@@ -281,8 +281,8 @@ void add_vertex_in_edge( Vertex v, Edge e) {
 std::pair<Edge,Edge> add_twin_edges(Vertex v1, Vertex v2) {
     //Edge e1,e2;
     //bool b;
-    //boost::tie( e1 , b ) = boost::add_edge( v1, v2, g);
-    //boost::tie( e2 , b ) = boost::add_edge( v2, v1, g);
+    //std::tie( e1 , b ) = boost::add_edge( v1, v2, g);
+    //std::tie( e2 , b ) = boost::add_edge( v2, v1, g);
     Edge e1 = boost::add_edge( v1, v2, g).first;
     Edge e2 = boost::add_edge( v2, v1, g).first;
     //twin_edges(e1,e2);
@@ -326,7 +326,7 @@ Face add_face(const TFaceProperties& prop) {
 VertexVector vertices()  const {
     VertexVector vv;
     VertexItr it_begin, it_end, itr;
-    boost::tie( it_begin, it_end ) = boost::vertices( g );
+    std::tie( it_begin, it_end ) = boost::vertices( g );
     for ( itr=it_begin ; itr != it_end ; ++itr ) {
         vv.push_back( *itr );
     }
@@ -396,7 +396,7 @@ EdgeVector face_edges( Face f) const {
 EdgeVector out_edges( Vertex v) const { 
     EdgeVector ev;
     OutEdgeItr it, it_end;
-    boost::tie( it, it_end ) = boost::out_edges( v, g );
+    std::tie( it, it_end ) = boost::out_edges( v, g );
     for ( ; it != it_end ; ++it ) {
         ev.push_back(*it);
     }
@@ -408,7 +408,7 @@ EdgeVector out_edges( Vertex v) const {
 EdgeVector edges() const {
     EdgeVector ev;
     EdgeItr it, it_end;
-    boost::tie( it, it_end ) = boost::edges( g );
+    std::tie( it, it_end ) = boost::edges( g );
     for ( ; it != it_end ; ++it ) {
         ev.push_back(*it);
     }
@@ -428,7 +428,7 @@ Edge previous_edge( Edge e ) const {
 FaceVector adjacent_faces( Vertex q ) const {
     std::set<Face> face_set;
     OutEdgeItr itr, itr_end;
-    boost::tie( itr, itr_end) = boost::out_edges(q, g);
+    std::tie( itr, itr_end) = boost::out_edges(q, g);
     for ( ; itr!=itr_end ; ++itr ) {
         face_set.insert( g[*itr].face );
     }
@@ -546,7 +546,7 @@ void remove_deg2_vertex( Vertex v ) {
     Face face2 = g[ v_edges[0] ].face;
     
     Edge new1, new2;
-    boost::tie(new1,new2) = add_twin_edges(v1,v2);
+    std::tie(new1,new2) = add_twin_edges(v1,v2);
     set_next(new1,v2_next);
     set_next(new2,v1_next);
     set_next(v2_prev,new2);

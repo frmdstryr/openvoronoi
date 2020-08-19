@@ -37,20 +37,20 @@ def insert_polygon_points(vd, polygon):
     for p in polygon:
         pts.append(ovd.Point(p[0], p[1]))
     id_list = []
-    print "inserting ", len(pts), " point-sites:"
+    print("inserting %s point-sites:" % len(pts))
     m = 0
     for p in pts:
         id_list.append(vd.addVertexSite(p))
-        print " ", m, " added vertex ", id_list[len(id_list) - 1]
+        print(" %s added vertex %s" % (m, id_list[len(id_list) - 1]))
         m = m + 1
-    print vd.numFaces(), " faces after all points inserted"
+    print("%s faces after all points inserted" % vd.numFaces())
     return id_list
 
 
 def insert_polygon_segments(vd, id_list):
     j = 0
     jmax = 9999999  # for debugging, set jmax to the problematic case to stop algorithm in the middle
-    print "inserting ", len(id_list), " line-segments:"
+    print("inserting %s line-segments:" % len(id_list))
     for n in range(len(id_list)):
         n_nxt = n + 1
         if n == (len(id_list) - 1):
@@ -58,7 +58,7 @@ def insert_polygon_segments(vd, id_list):
 
         if (j < jmax):
             # vd.debug_on()
-            print " ", j, "inserting segment ", id_list[n], " - ", id_list[n_nxt]
+            print(" %s inserting segment %s - %s" % (j, id_list[n],  id_list[n_nxt]))
 
             if 0:  # id_list[n] == 22871: #102187: # 102187/7 #115869: # 51456: 115869
                 vd.debug_on()
@@ -72,7 +72,7 @@ def insert_polygon_segments(vd, id_list):
                 # print vod
                 # print dir(vod)
                 #    vod.drawVertexIdx(v)
-                print "PYTHON All DONE."
+                print("PYTHON All DONE.")
                 myscreen.render()
                 myscreen.iren.Start()
             else:
@@ -195,7 +195,7 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0.22, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -228,12 +228,12 @@ if __name__ == "__main__":
 
     vod.setAll()
 
-    # myscreen.render()        
+    # myscreen.render()
     # myscreen.iren.Start()
 
     mapocket = ovd.MedialAxisPocket(vd.getGraph())
     mapocket.debug(True)
-    mapocket.setWidth(0.005)
+    mapocket.set_width(0.005)
 
     mapocket.run()
 
@@ -246,7 +246,7 @@ if __name__ == "__main__":
         for n in range(len(mic_list)):
             mic = mic_list[n]
             if n == 0:
-                print "maxmic at ", mic[0], " r = ", mic[1]
+                print("maxmic at %s r= %s" % (mic[0], mic[1]))
                 drawCircle(myscreen, mic[0], mic[1], ovdvtk.red)
             else:
                 drawCircle(myscreen, mic[0], mic[1], ovdvtk.green)
@@ -261,7 +261,7 @@ if __name__ == "__main__":
             time.sleep(0.1)
             myscreen.render()
 
-        print "mic done."
+        print("mic done.")
 
     """
     nframe=0
@@ -277,11 +277,11 @@ if __name__ == "__main__":
         else:
             break # end operation when we don't get a valid MIC
         nframe = nframe+1
-        
-    print "mic done."
+
+    print("mic done.")
     """
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     myscreen.iren.Start()

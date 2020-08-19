@@ -41,7 +41,7 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -69,14 +69,14 @@ if __name__ == "__main__":
     pts = [p1, p2, p3, p4, p5]
 
     # t_after = time.time()
-    # print ".done in {0:.3f} s.".format( t_after-t_before )
+    # print(".done in {0:.3f} s.".format( t_after-t_before ))
     times = []
     id_list = []
     m = 0
     t_before = time.time()
     for p in pts:
         id_list.append(vd.addVertexSite(p))
-        # print m," added vertex", seg_id[0]
+        # print("%s added vertex %s" % (m, seg_id[0]))
         m = m + 1
 
     t_after = time.time()
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # exit()
 
     # print "   ",2*Nmax," point-sites sites took {0:.3f}".format(times[0])," seconds, {0:.2f}".format( 1e6*float( times[0] )/(float(2*Nmax)*float(math.log10(2*Nmax))) ) ,"us/n*log(n)"
-    print "all point sites inserted. ",
+    print("all point sites inserted. ")
     vd.check()
 
     # nsegs = Nmax
@@ -157,9 +157,9 @@ if __name__ == "__main__":
         maxerr = max(err)
         print "min error= ",minerr
         print "max error= ",maxerr
-    
-    print "num vertices: ",vd.numVertices() 
-    print "num SPLIT vertices: ",vd.numSplitVertices() 
+
+    print "num vertices: ",vd.numVertices()
+    print "num SPLIT vertices: ",vd.numSplitVertices()
     """
     # calctime = t_after-t_before
 
@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
     vod.setAll()
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     # w2if.Modified()

@@ -1,19 +1,19 @@
 /*
  *  Copyright (c) 2010-2012 Anders Wallin (anders.e.e.wallin "at" gmail.com).
- *  
- *  This file is part of Openvoronoi 
+ *
+ *  This file is part of Openvoronoi
  *  (see https://github.com/aewallin/openvoronoi).
- *  
+ *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 2.1 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
@@ -29,8 +29,10 @@ namespace ovd {
 
 int VoronoiVertex::count = 0;
 
+VoronoiVertex::VoronoiVertex() {}
+
 // the expected degree of a vertex. checked by topology-checker
-VoronoiVertex::VertexDegreeMap VoronoiVertex::expected_degree = boost::assign::map_list_of 
+VoronoiVertex::VertexDegreeMap VoronoiVertex::expected_degree = boost::assign::map_list_of
     (OUTER,4)     // special outer vertices
     (NORMAL,6)    // normal vertex in the graph
     (POINTSITE,0) // point site
@@ -38,7 +40,7 @@ VoronoiVertex::VertexDegreeMap VoronoiVertex::expected_degree = boost::assign::m
     (SEPPOINT,6)  // end-point of separator
     (SPLIT,4)     // split point, to avoid loops in delete-tree
     (APEX,4) ;    // apex point on quadratic bisector
-    
+
 /// ctor with given status and type
 VoronoiVertex::VoronoiVertex( Point p, VertexStatus st, VertexType t) {
     init(p,st,t);
@@ -48,7 +50,7 @@ VoronoiVertex::VoronoiVertex( Point p, VertexStatus st, VertexType t, Point init
     init(p,st,t,initDist);
 }
 /// ctor with initial k3-value
-VoronoiVertex::VoronoiVertex( Point p, VertexStatus st, VertexType t, Point initDist, double lk3) {   
+VoronoiVertex::VoronoiVertex( Point p, VertexStatus st, VertexType t, Point initDist, double lk3) {
     init(p,st,t,initDist,lk3);
 }
 /// ctor with initial clearance-disk radius
@@ -64,9 +66,9 @@ void VoronoiVertex::init() {
     count++;
     in_queue = false;
     alfa=-1; // invalid/non-initialized alfa value
-    null_face = std::numeric_limits<HEFace>::quiet_NaN();    
+    null_face = std::numeric_limits<HEFace>::quiet_NaN();
     type = NORMAL;
-    face = std::numeric_limits<HEFace>::quiet_NaN();  
+    face = std::numeric_limits<HEFace>::quiet_NaN();
     max_error = 0;
 }
 
@@ -108,12 +110,12 @@ double VoronoiVertex::dist(const Point& p) const { return (position-p).norm(); }
 void VoronoiVertex::zero_dist() {r=0;}
 /// return clearance disk-radius
 double VoronoiVertex::dist() const { return r; }
-/// in-circle predicate 
+/// in-circle predicate
 double VoronoiVertex::in_circle(const Point& p) const {
-    //if ( r==0 && dist(p) == 0 ) 
+    //if ( r==0 && dist(p) == 0 )
     //    return -1;
     //else
-        return dist(p) - r; 
+        return dist(p) - r;
 }
 /// reset the index count
 void VoronoiVertex::reset_count() { count = 0; }

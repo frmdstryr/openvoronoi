@@ -29,7 +29,7 @@ def rotate(segs,angle):
 			seg2.append(p2)
 		out.append(seg2)
 	return out
-    
+
 def center(segs, exts, tscale):
 	minx = tscale*exts.minx
 	maxx = tscale*exts.maxx
@@ -39,24 +39,24 @@ def center(segs, exts, tscale):
 	meany = miny+0.5*(maxy-miny)
 	out = translate(segs, -meanx, -meany)
 	return out
-	
+
 
 def insert_polygon_points(vd, polygon):
     pts=[]
     for p in polygon:
         pts.append( ovd.Point( p[0], p[1] ) )
     id_list = []
-    print "inserting ",len(pts)," point-sites:"
+    print("inserting %s point-sites:" % len(pts))
     m=0
     for p in pts:
         id_list.append( vd.addVertexSite( p ) )
         #print " ",m," added vertex ", id_list[ len(id_list) -1 ]
-        m=m+1   
+        m=m+1
     #print vd.numFaces()," faces after all points inserted"
     return id_list
 
 def insert_polygon_segments(vd,id_list):
-    print "inserting ",len(id_list)," line-segments:"
+    print("inserting %s line-segments:" % len(id_list))
     for n in range(len(id_list)):
         n_nxt = n+1
         if n==(len(id_list)-1):
@@ -83,16 +83,16 @@ def insert_many_polygons(vd,segs):
         polygon_ids.append(poly_id)
     t_after = time.time()
     pt_time = t_after-t_before
-    
+
     t_before = time.time()
     for ids in polygon_ids:
         insert_polygon_segments(vd,ids)
-    
+
     t_after = time.time()
     seg_time = t_after-t_before
-    
+
     return [pt_time, seg_time]
-    
+
 def ttt_segments(text,scale):
     wr = ttt.SEG_Writer()
 
@@ -106,12 +106,12 @@ def ttt_segments(text,scale):
     wr.conic_line_subdivision = 50 # =10 increasesn nr of points to 366, = 5 gives 729 pts
     wr.cubic_biarc_subdivision = 10 # no effect?
     wr.cubic_line_subdivision = 10 # no effect?
-    s3 = ttt.ttt(text,wr) 
+    s3 = ttt.ttt(text,wr)
     segs = wr.get_segments()
     exts = wr.extents
     return (segs, exts)
-    
-    
+
+
 if __name__ == "__main__":
     n=1
     rot=-20.333
@@ -123,7 +123,7 @@ if __name__ == "__main__":
 
     alphabet = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
     char = alphabet[n]
-    print "ttt_single_glyph.py: inserting glyph ", char
+    print("ttt_single_glyph.py: inserting glyph %s" % char)
 
     scale = 3000
     #segs = ttt_segments(  char, scale)
@@ -132,20 +132,20 @@ if __name__ == "__main__":
     segs = center(segs, exts, 1/float(scale) )
     segs = rotate(segs, rot)
     segs = modify_segments(segs)
-    
+
     #segs = translate(segs, -0.5, -0.5)
     #segs = modify_segments(segs)
     vd = ovd.VoronoiDiagram(1,120)
-    
+
     insert_many_polygons(vd,segs)
-    
+
     # optional output to svg file
     filename = "svg_test.svg"
     #ovd.vd2svg(filename,vd)
     #print "wrote to file %s" % filename
-    
+
     c = vd.check()
-    print " VD check: ", c
+    print(" VD check: %s" % c)
     if c:
         exit(0)
     else:

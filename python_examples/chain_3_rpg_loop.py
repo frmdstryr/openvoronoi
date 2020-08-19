@@ -78,7 +78,7 @@ def rpg_vd(Npts, seed, debug):
     for p in poly:
         ocl_pt = ovd.Point(p[0], p[1])
         pts.append(ocl_pt)
-        print ocl_pt
+        print(ocl_pt)
 
     times = []
     id_list = []
@@ -112,9 +112,9 @@ def rpg_vd(Npts, seed, debug):
     t_after = time.time()
     times.append(t_after - t_before)
 
-    print " segs inserted in ", times[1], " s"
+    print(" segs inserted in %s s" % times[1])
     is_valid = vd.check()
-    print " vd-check: ", is_valid
+    print(" vd-check: %s" % is_valid)
 
     return [is_valid, vd, times]
 
@@ -126,16 +126,16 @@ def loop_run(Npts, max_seed, debug=False, debug_seed=-1):
     for seed in seed_range:
         debug2 = debug
         if (seed == debug_seed):
-            print "debug seed!"
+            print("debug seed!")
             debug2 = True
         result = rpg_vd(Npts, seed, debug2)
-        print "N=", Npts, " s=", seed, " ok?=", result
+        print("N=%s s=%s ok?=%s" % (Npts, seed, result))
         assert (result[0] == True)
 
 
 def single_run(Npts, seed, debug=False):
     result = rpg_vd(Npts, seed, debug)
-    print "N=", Npts, " s=", seed, " ok?=", result
+    print("N=%s s=%s ok?=%s" % (Npts, seed, result))
     assert (result[0] == True)
     return result
 

@@ -21,7 +21,7 @@ def writeFrame(w2if, lwr, n):
 
 
 if __name__ == "__main__":
-    # print ocl.revision()
+    # print(ocl.revision())
     myscreen = ovdvtk.VTKScreen(width=1024, height=720)  # (width=1920, height=1080)
     ovdvtk.drawOCLtext(myscreen, rev_text=ovd.version())
 
@@ -44,9 +44,9 @@ if __name__ == "__main__":
     myscreen.camera.SetFocalPoint(0.0, 0, 0)
 
     vd = ovd.VoronoiDiagram(far, 120)
-    print ovd.version()
+    print(ovd.version())
     vd.check()
-    # print "created."
+    # print("created.")
 
     # for vtk visualization
     vod = ovdvtk.VD(myscreen, vd, float(scale), textscale=0.01, vertexradius=0.003)
@@ -72,14 +72,14 @@ if __name__ == "__main__":
     # + regularGridGenerators(far, Nmax) + circleGenerators(far, Nmax)
 
     # plist = [ovd.Point(0,0)]
-    # print plist
+    # print(plist)
     times = []
     t_before = time.time()
     n = 0
     id_list = []
     # vd.debug_on()
     for p in plist:
-        print n, " adding PointSite ", p
+        print("%s adding PointSite %s" % (n, p))
         id_list.append(vd.addVertexSite(p))
         n = n + 1
     t_after = time.time()
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     vod.setAll()
     myscreen.render()
 
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     myscreen.iren.Start()

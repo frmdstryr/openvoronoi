@@ -17,29 +17,29 @@ def insert_polygon_points(vd, polygon):
     for p in polygon:
         pts.append(ovd.Point(p[0], p[1]))  # this just converts (p[0], p[1]) format points into ovd.Point
     id_list = []
-    print "inserting ", len(pts), " point-sites:"
+    print("inserting %s point-sites:" % len(pts))
     m = 0
     # pts = [pt1, pt2, pt3, pt4, pt5]  where each pt is of class ovd.Point
     for p in pts:
         id_list.append(vd.addVertexSite(p))  # note we store and return the Point ID returned here!
-        print " ", m, " added vertex ", id_list[len(id_list) - 1]
+        print(" %s added vertex %s" % (m, id_list[len(id_list) - 1]))
         m = m + 1
     return id_list
 
 
 # insert polygon line-segments based on a list of IDs returned by insert_polygon_points()
 # id_list = [0, 1, 2, 3, 4, 5] defines a closed polygon. the
-# 0->1->2->3->4->5->0 
+# 0->1->2->3->4->5->0
 # the IDs _must_ refer to points that have been previously inserted with vd.addVertexSite()
 #
 def insert_polygon_segments(vd, id_list):
     j = 0
-    print "inserting ", len(id_list), " line-segments:"
+    print("inserting %s line-segments:" % len(id_list))
     for n in range(len(id_list)):
         n_nxt = n + 1
         if n == (len(id_list) - 1):
             n_nxt = 0
-        print " ", j, "inserting segment ", id_list[n], " - ", id_list[n_nxt]
+        print(" %s inserting segment %s - %s" % (j, id_list[n],  id_list[n_nxt]))
         # this inserts a line-segment id_list[n] -> id_list[n_nxt] into the VoronoiDiagram
         vd.addLineSite(id_list[n], id_list[n_nxt])
         j = j + 1
@@ -51,7 +51,7 @@ def insert_polygon_segments(vd, id_list):
 # poly defines a closed polygon as a a list of points
 #   poly1 = [ [x1,y1], [x2,y2], [x3,y3], ..., [xN,yN] ]
 # where the last point [xN,yN] in the list connects to the first [x1,y1]
-# 
+#
 def insert_many_polygons(vd, segs):
     polygon_ids = []
     t_before = time.time()
@@ -97,7 +97,7 @@ def translate(segs, x, y):
 #   ...
 # ]
 # each point is a 2D point ( p[0], p[1] )
-# each sub-list corresponds to a closed loop of line-segments 
+# each sub-list corresponds to a closed loop of line-segments
 #   e.g. p1->p2->p3->p4->p5->p1
 #
 # If the main(outer) geometry is given in e.g. CW orientation, then
@@ -109,10 +109,10 @@ def ttt_segments(text, scale):
     wr.cubic = False
 
     wr.conic_biarc_subdivision = 10  # this has no effect?
-    wr.conic_line_subdivision = 50  # this increases nr of points 
+    wr.conic_line_subdivision = 50  # this increases nr of points
     wr.cubic_biarc_subdivision = 10  # no effect?
     wr.cubic_line_subdivision = 10  # no effect?
-    wr.setFont(3)
+    wr.set_font(3)
 
     wr.scale = float(1) / float(scale)
     ttt.ttt(text, wr)
@@ -191,8 +191,8 @@ if __name__ == "__main__":
 
     # build a VD from the input geometry
     times = insert_many_polygons(vd, segs)
-    print "all sites inserted. "
-    print "VD check: ", vd.check()  # sanity check
+    print("all sites inserted. ")
+    print("VD check: %s" % vd.check())  # sanity check
 
     # this filters the diagram so we are left with only the interior or the exterior
     # of the polygon. If the filtering is omitted we get offsets on both sides of the input geometry.
@@ -224,10 +224,10 @@ if __name__ == "__main__":
     #    cw = clockwise/anticlockwise True/False flag for arcs
 
     # now we draw the offsets in VTK
-    print len(ofs_list), " offsets to draw:"
+    print("%s offsets to draw:" % len(ofs_list))
     m = 0
     for ofs in ofs_list:
-        print m, " / ", len(ofs_list)
+        print("%s / %s" % (m, len(ofs_list)))
         offset2vtk.drawOffsets2(myscreen, ofs)
         m = m + 1
 
@@ -246,6 +246,6 @@ if __name__ == "__main__":
     # display timing-info on how long the VD build took
     vod.setVDText2(times)
     vod.setAll()
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
     myscreen.render()
     myscreen.iren.Start()

@@ -68,9 +68,9 @@ def drawLoops(myscreen, loops, loopColor):
 
                 previous = p
             n = n + 1
-        print "rendered loop ", nloop, " with ", len(lop), " points"
-        print "   n_lines = ", n_lines
-        print "   n_arcs  = ", n_arcs
+        print("rendered loop %s with %s points" % (nloop, len(lop)))
+        print("   n_lines = %s" % n_lines)
+        print("   n_arcs  = %s" % n_arcs)
 
         nloop = nloop + 1
 
@@ -114,30 +114,30 @@ def draw_ttt(myscreen, text, x, y, scale):
     wr.conic_line_subdivision = 50  # this increasesn nr of points to 366
     # wr.cubic_biarc_subdivision = 10 # no effect?
     # wr.cubic_line_subdivision = 10 # no effect?
-    wr.setFont(0)
+    wr.set_font(0)
     s3 = ttt.ttt(text, wr)
     ext = wr.extents
     dx = ext.maxx - ext.minx
 
     segs = wr.get_segments()
     segs = translate(segs, x, y)
-    print "number of polygons: ", len(segs)
+    print("number of polygons: %s" % len(segs))
     np = 0
     sum_pts = 0
 
     segs = modify_segments(segs)
     for s in segs:
         sum_pts += len(s)
-        print " polygon ", np, " has ", len(s), " points"
+        print(" polygon %s has %s points" % (np, len(s)))
         np = np + 1
-    print "total points: ", sum_pts
+    print("total points: %s" % sum_pts)
     drawLoops(myscreen, segs, ovdvtk.yellow)
 
 
 # this script only draws geometry from ttt
 # no voronoi-diagram is created!
 if __name__ == "__main__":
-    print "ttt version = ", ttt.version()
+    print("ttt version = %s" % ttt.version())
     # w=2500
     # h=1500
 
@@ -167,7 +167,7 @@ if __name__ == "__main__":
     # draw_ttt(myscreen, "abcdefghijklmnopqrstuvwxyz", -0.5,-0.1,80000)
     # draw_ttt(myscreen, "1234567890*", -0.5,-0.2,80000)
     # draw_ttt(myscreen, "m", -0.5,-0.2,80000)
-    print "PYTHON All DONE."
+    print("PYTHON All DONE.")
 
     myscreen.render()
     myscreen.iren.Start()

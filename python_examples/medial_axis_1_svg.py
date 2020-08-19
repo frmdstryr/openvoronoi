@@ -17,7 +17,7 @@ def insert_polygon_points(vd, polygon):
     m=0
     for p in pts:
         id_list.append( vd.addVertexSite( p ) )
-        #print " ",m," added vertex ", id_list[ len(id_list) -1 ]
+        #print(" %s added vertext %s" % (m, id_list[ len(id_list) -1 ]))
         m=m+1
     return id_list
 
@@ -28,7 +28,7 @@ def insert_polygon_segments(vd,id_list):
         n_nxt = n+1
         if n==(len(id_list)-1):
             n_nxt=0
-        #print " ",j,"inserting segment ",id_list[n]," - ",id_list[n_nxt]
+        #print(" %s inserting segment %s-%s" % (j, id_list[n], id_list[n_nxt]))
         vd.addLineSite( id_list[n], id_list[n_nxt])
         j=j+1
 

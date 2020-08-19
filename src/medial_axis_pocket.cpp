@@ -153,7 +153,7 @@ bool medial_axis_pocket::find_next_mic() {
     
     Point c2;
     double r2;
-    boost::tie(c2,r2) = edge_point(current_edge, 1.0 );
+    std::tie(c2,r2) = edge_point(current_edge, 1.0 );
     double w_target = cut_width(current_center, current_radius, c2, r2); //( c2-c1 ).norm() + r2 - r1;
 
     if ( w_target > max_width ) {
@@ -163,7 +163,7 @@ bool medial_axis_pocket::find_next_mic() {
         // find a point on the current edge
         double next_u;
         double next_radius; // = find_next_radius();
-        boost::tie(next_u,next_radius) = find_next_u();
+        std::tie(next_u,next_radius) = find_next_u();
         if (debug) {  std::cout << " next_radius = " << next_radius << "\n"; }
         output_next_mic(next_u, next_radius, new_branch);
         return true;
@@ -176,7 +176,7 @@ bool medial_axis_pocket::find_next_mic() {
         if (debug) std::cout << "find_next_mic() Finding new edge !\n";
         
         bool end_branch_mic;
-        boost::tie( current_edge, end_branch_mic) = find_next_edge(); // move to the next edge
+        std::tie( current_edge, end_branch_mic) = find_next_edge(); // move to the next edge
         if ( current_edge == HEEdge() ) { // invalid edge marks end of operation
             if (debug)  std::cout << "find_next_mic() end of operation.\n";
             return false;
@@ -191,7 +191,7 @@ bool medial_axis_pocket::find_next_mic() {
         
         double next_u;
         double next_radius;
-        boost::tie(next_u,next_radius) = find_next_u();
+        std::tie(next_u,next_radius) = find_next_u();
         if (new_branch) {
             new_branch=false;
             output_next_mic(next_u, next_radius, true);
@@ -310,7 +310,7 @@ bool medial_axis_pocket::has_next_radius(HEEdge e) {
     // check if the edge e is one where we continue
     double r2;
     Point  c2;
-    boost::tie(c2,r2) = edge_point(e,1.0);
+    std::tie(c2,r2) = edge_point(e,1.0);
 
     double w_target = cut_width(current_center, current_radius, c2, r2);
     if (debug) {
@@ -352,7 +352,7 @@ std::pair<double,double> medial_axis_pocket::find_next_u() {
     Result r1 = boost::math::tools::toms748_solve(t, current_u, 1.0, tol, max_iter);
     double rnext;
     Point pnext;
-    boost::tie( pnext, rnext ) = edge_point( current_edge, r1.first );
+    std::tie( pnext, rnext ) = edge_point( current_edge, r1.first );
     return std::make_pair( r1.first, rnext );
 }
     
@@ -366,7 +366,7 @@ void medial_axis_pocket::output_next_mic(double next_u, double next_radius, bool
     double r1 = current_radius;
     Point c2;
     double r2;
-    boost::tie(c2,r2) = edge_point(current_edge, next_u); //g[current_edge].point(next_radius);
+    std::tie(c2,r2) = edge_point(current_edge, next_u); //g[current_edge].point(next_radius);
     //double r2 = next_radius;
     if (debug) {
         std::cout << "output_next_mic(): \n";
@@ -511,7 +511,7 @@ double medial_axis_pocket::CutWidthError::operator()(const double x) {
     // w_max = | c2 - c1 | + r2 - r1
     Point c2; // = m->edge_point(x); //g[e].point(x); // current MIC center
     double r2; // = x; // current MIC radius
-    boost::tie(c2,r2) = m->edge_point(e,x);
+    std::tie(c2,r2) = m->edge_point(e,x);
     double w = (c2-c1).norm() + r2 - r1; // this is the cut-width
     return w-w_max; // error compared to desired cut-width
 }

@@ -22,22 +22,22 @@ def insert_polygon_points(vd, polygon):
     for p in polygon:
         pts.append( ovd.Point( p[0], p[1] ) )
     id_list = []
-    print "inserting ",len(pts)," point-sites:"
+    print("inserting %s point-sites:" % len(pts))
     m=0
     for p in pts:
         id_list.append( vd.addVertexSite( p ) )
-        print " ",m," added vertex ", id_list[ len(id_list) -1 ]
-        m=m+1    
+        print(" %s added vertex %s" % (m, id_list[ len(id_list) -1 ]))
+        m=m+1
     return id_list
 
 def insert_polygon_segments(vd,id_list):
     j=0
-    print "inserting ",len(id_list)," line-segments:"
+    print("inserting %s line-segments:" % len(id_list))
     for n in range(len(id_list)):
         n_nxt = n+1
         if n==(len(id_list)-1):
             n_nxt=0
-        print " ",j,"inserting segment ",id_list[n]," - ",id_list[n_nxt]
+        print(" %s inserting segment %s - %s" % (j, id_list[n], id_list[n_nxt]))
         vd.addLineSite( id_list[n], id_list[n_nxt])
         j=j+1
 
@@ -52,7 +52,7 @@ def modify_segments(segs):
         segs_mod.append(seg)
         #drawSegment(myscreen, seg)
     return segs_mod
-    
+
 def insert_many_polygons(vd,segs):
     polygon_ids =[]
     t_before = time.time()
@@ -61,16 +61,16 @@ def insert_many_polygons(vd,segs):
         polygon_ids.append(poly_id)
     t_after = time.time()
     pt_time = t_after-t_before
-    
+
     t_before = time.time()
     for ids in polygon_ids:
         insert_polygon_segments(vd,ids)
-    
+
     t_after = time.time()
     seg_time = t_after-t_before
-    
+
     return [pt_time, seg_time]
-    
+
 def ttt_segments(text,scale,conic_subdiv):
     wr = ttt.SEG_Writer()
 
@@ -79,23 +79,23 @@ def ttt_segments(text,scale,conic_subdiv):
     wr.conic = False
     wr.cubic = False
     wr.conic_biarc_subdivision = 10 # this has no effect?
-    wr.conic_line_subdivision = conic_subdiv # this increases nr of points 
+    wr.conic_line_subdivision = conic_subdiv # this increases nr of points
     wr.cubic_biarc_subdivision = 10 # no effect?
     wr.cubic_line_subdivision = 10 # no effect?
     wr.setFont(3)
     wr.scale = float(1)/float(scale)
-    s3 = ttt.ttt(text,wr) 
+    s3 = ttt.ttt(text,wr)
     segs = wr.get_segments()
     return segs
-    
-    
-if __name__ == "__main__":  
+
+
+if __name__ == "__main__":
 
     conic_subdiv = 200
     if len(sys.argv) == 2:
         conic_subdiv  = int(sys.argv[1])
-    
-    
+
+
     scale = 25000
     segs = ttt_segments(  "ABCDEFGHIJKLM", scale, conic_subdiv)
     segs2 = ttt_segments( "NOPQRSTUVWXYZ", scale, conic_subdiv)
@@ -115,14 +115,14 @@ if __name__ == "__main__":
     segs4 = modify_segments(segs4)
     segs5 = translate(segs5, xt*dx, -0.32*dx)
     segs5 = modify_segments(segs5)
-    
+
     vd = ovd.VoronoiDiagram(1,120)
-        
+
     all_segs=segs+segs2 +segs3 +segs4+segs5
     insert_many_polygons(vd,all_segs)
 
     c = vd.check()
-    print " VD check: ", c
+    print(" VD check: %s" % c)
     if c:
         exit(0)
     else:
