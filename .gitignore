@@ -88,3 +88,7 @@ Picasa.ini
 
 # IDE project data
 .idea/*
+.kdev4/
+*.kdev4
+
+*.nc
