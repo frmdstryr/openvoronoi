@@ -23,7 +23,7 @@ def writeFrame(w2if, lwr, n):
 def regularGridGenerators(far, Nmax):
     # REGULAR GRID
     rows = int(math.sqrt(Nmax))
-    print "rows= ", rows
+    print("rows= %s" % rows)
     gpos = [-0.7 * far, 1.4 * far / float(rows - 1)]  # start, stride
     plist = []
     for n in range(rows):
@@ -112,11 +112,11 @@ if __name__ == "__main__":
     npts = Nmax - 1
     for p in plist:
         if n < npts:
-            print n, " adding ", p
+            print("%s adding %s" % (n, p))
             id_list.append(vd.addVertexSite(p))
             n = n + 1
     nstep = 7
-    vd.addVertexSite(plist[npts], nstep)
+    #vd.addVertexSite(plist[npts], nstep)
 
     t_after = time.time()
     calctime = t_after - t_before

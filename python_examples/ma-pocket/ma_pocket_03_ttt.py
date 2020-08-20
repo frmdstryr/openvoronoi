@@ -228,8 +228,8 @@ if __name__ == "__main__":
 
     vod.setAll()
 
-    # myscreen.render()
-    # myscreen.iren.Start()
+    myscreen.render()
+    myscreen.iren.Start()
 
     mapocket = ovd.MedialAxisPocket(vd.getGraph())
     mapocket.debug(True)

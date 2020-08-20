@@ -20,7 +20,7 @@ def drawSeg(myscreen, previous, p):
         prev = ovd.Point(previous[0], previous[1])
         target = ovd.Point(p[0], p[1])
         radius = p[2]
-        cw = p[3]
+        cw = p.cw
         center = ovd.Point(p[4], p[5])
         # print "prev ",prev
         # print "center ",center

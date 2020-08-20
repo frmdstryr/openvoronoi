@@ -617,8 +617,8 @@ if __name__ == "__main__":
     # the initial largest MIC. to be cleared with a spiral-path
     drawCircle(myscreen, maxmic[0], maxmic[1], ovdvtk.red)
 
-    # myscreen.render()
-    # myscreen.iren.Start()
+    myscreen.render()
+    myscreen.iren.Start()
     ngc_writer.scale = 10 / 0.03
     ngc_writer.preamble()
 

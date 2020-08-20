@@ -111,6 +111,9 @@ if __name__ == "__main__":
 
     vod.setAll()
 
+    # myscreen.render()
+    # myscreen.iren.Start()
+
     mapocket = ovd.MedialAxisPocket(vd.getGraph())
     mapocket.set_width(0.005)
 
@@ -135,6 +138,7 @@ if __name__ == "__main__":
             # print("Frame: %s" % lwr.GetFileName())
             nframe += 1
             lwr.Write()
+
 
             time.sleep(0.1)
             myscreen.render()

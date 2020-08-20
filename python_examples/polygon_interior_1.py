@@ -34,11 +34,11 @@ def drawOffsets(myscreen, ofs):
             # p[0] is the Point
             # p[1] is -1 for lines, and r for arcs
             if n == 0:  # don't draw anything on the first iteration
-                previous = p[0]
+                previous = p.p
                 # first_point = p[0]
             else:
-                r = p[1]
-                p = p[0]
+                r = p.r
+                p = p.p
                 if r == -1:
                     drawLine(myscreen, previous, p, lineColor)
                 else:

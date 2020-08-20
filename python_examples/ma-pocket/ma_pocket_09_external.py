@@ -424,13 +424,13 @@ def insert_offset_loop(vd, ofs):
             # print of
             if first:
                 # loop.append( of[0] )
-                previous = of[0]
+                previous = of.p
                 first = False
             else:
-                cw = of[3]  # cw/ccw flag
-                cen = of[2]  # center
-                r = of[1]  # radius
-                p = of[0]  # target point
+                cw = of.cw  # cw/ccw flag
+                cen = of.c  # center
+                r = of.r  # radius
+                p = of.p  # target point
                 if r == -1:  # r=-1 means line-segment
                     loop.append(p)  # points.extend( [previous,p] ) #drawLine(myscreen, previous, p, lineColor)
                 else:  # otherwise we have an arc

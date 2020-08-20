@@ -78,11 +78,11 @@ def drawOffsets(myscreen, ofs):
             # p[0] is the Point
             # p[1] is -1 for lines, and r for arcs
             if n == 0:  # don't draw anything on the first iteration
-                previous = p[0]
+                previous = p.p
             else:
-                cw = p[3]
-                cen = p[2]
-                r = p[1]
+                cw = p.cw
+                cen = p.c
+                r = p.r
                 pt = p[0]
 
                 lineColor = ovdvtk.green
@@ -163,13 +163,13 @@ def drawOffsets2(myscreen, ofs):
             # p[0] is the Point
             # p[1] is -1 for lines, and r for arcs
             if n == 0:  # don't draw anything on the first iteration
-                previous = p[0]
+                previous = p.p
                 # first_point = p[0]
             else:
-                cw = p[3]  # cw/ccw flag
-                cen = p[2]  # center
-                r = p[1]  # radius
-                p = p[0]  # target point
+                cw = p.cw  # cw/ccw flag
+                cen = p.c  # center
+                r = p.r  # radius
+                p = p.p  # target point
                 if r == -1:  # r=-1 means line-segment
                     points.extend([previous, p])  # drawLine(myscreen, previous, p, lineColor)
                 else:  # otherwise we have an arc
