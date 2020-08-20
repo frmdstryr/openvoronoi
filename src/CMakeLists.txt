@@ -132,8 +132,10 @@ endif()
 
 # find boost-python
 IF( ${BUILD_PYTHON_MODULE} MATCHES ON)
-  #find_package( Boost COMPONENTS python REQUIRED)
-  #MESSAGE(STATUS "Boost_PYTHON_LIBRARY is: " ${Boost_PYTHON_LIBRARY})
+  # Ex 2.7 or 3.8
+  set(PY_VER "$ENV{PY_VER}")
+  set(PYBIND11_PYTHON_VERSION ${PY_VER})
+  find_package(Python ${PY_VER} EXACT REQUIRED Development)
   find_package(pybind11 REQUIRED)
 ENDIF()
 

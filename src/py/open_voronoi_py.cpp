@@ -71,7 +71,9 @@ namespace pyovd {
 PYBIND11_MODULE(openvoronoi, m) {
     m.def("version", version);
     m.def("build_type", build_type);
-    m.def("vd2svg", vd2svg);
+    m.def("vd2svg", [](std::string path, VoronoiDiagram_py* vd){
+        vd2svg(path, vd);
+    });
 
     py::class_<HEGraph>(m, "Graph")
         .def(py::init<>())
@@ -94,7 +96,7 @@ PYBIND11_MODULE(openvoronoi, m) {
         .def("getVoronoiEdges",  &VoronoiDiagram_py::getVoronoiEdges)
         .def("getVoronoiEdgesOffset",  &VoronoiDiagram_py::getVoronoiEdgesOffset)
         .def("numPointSites", &VoronoiDiagram_py::num_point_sites)
-        .def("numLineSites", &VoronoiDiagram::num_line_sites)
+        .def("numLineSites", &VoronoiDiagram_py::num_line_sites)
         .def("numArcSites", &VoronoiDiagram_py::num_arc_sites)
         .def("numVertices", &VoronoiDiagram_py::num_vertices)
         .def("numFaces", &VoronoiDiagram_py::num_faces)
@@ -151,6 +153,7 @@ PYBIND11_MODULE(openvoronoi, m) {
         .def(py::init<>())
         .def(py::init<double, double>())
         .def(py::init<Point>())
+        .def(py::self == py::self)
         .def(double() * py::self)
         .def(py::self *  double())
         .def(py::self -= py::self)
